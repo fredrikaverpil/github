@@ -2,40 +2,59 @@ name: vuln
 
 on:
   workflow_call:
+    inputs:
+      go-version:
+        required: false
+        type: string
+        default: 'stable'
+      working-directory:
+        description: 'directory to run vulnerability checks in (if specified, auto-detection is skipped)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
+  find-dirs:
+    uses: ./.github/workflows/go-find-modules.yml
+    with:
+      working-directory: ${{ inputs.working-directory }}
+
   govulncheck:
     runs-on: ubuntu-latest
+    needs: find-dirs
     strategy:
       matrix:
-        go-version: [stable] # rc versions are defined like 1.24.0-rc.3
+        directory: ${{ fromJson(needs.find-dirs.outputs.directories) }}
+      fail-fast: false
     env:
       GOTOOLCHAIN: local
       GOTOOLCHAIN_RESOLVE_PRIVATE: 1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: ${{ inputs.go-version }}
       - id: govulncheck
         uses: golang/govulncheck-action@v1
+        with:
+          working-directory: ${{ matrix.directory }}
 
   gosec:
     runs-on: ubuntu-latest
+    needs: find-dirs
     strategy:
       matrix:
-        go-version: [stable] # rc versions are defined like 1.24.0-rc.3
+        directory: ${{ fromJson(needs.find-dirs.outputs.directories) }}
+      fail-fast: false
     env:
       GOTOOLCHAIN: local
       GOTOOLCHAIN_RESOLVE_PRIVATE: 1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }}
-      - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
+          go-version: ${{ inputs.go-version }}
+      - uses: securego/gosec@master
+        with:
+          args: "./..."
+          working-directory: ${{ matrix.directory }}

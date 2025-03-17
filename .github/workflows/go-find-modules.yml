@@ -1,0 +1,39 @@
+name: find-go-modules
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: 'directory to use (if specified, auto-detection is skipped)'
+        required: false
+        type: string
+        default: ''
+    outputs:
+      directories:
+        description: 'list of Go module directories in JSON format'
+        value: ${{ jobs.find.outputs.directories }}
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    outputs:
+      directories: ${{ steps.find-modules.outputs.directories }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find-modules
+        shell: bash
+        run: |
+          if [[ -n "${{ inputs.working-directory }}" ]]; then
+            # Use specified directory
+            echo "directories=[\"${{ inputs.working-directory }}\"]" >> $GITHUB_OUTPUT
+          else
+            # Auto-detect directories with go.mod files
+            DIRS=$(find . -name "go.mod" -type f -not -path "*/\\.*" -not -path "*/vendor/*" | xargs -I{} dirname {} | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            echo "directories=$DIRS" >> $GITHUB_OUTPUT
+          fi
+
+      - name: debug detected directories
+        run: |
+          echo "Detected Go modules in these directories:"
+          echo '${{ steps.find-modules.outputs.directories }}' | jq -r '.[]'
+          echo "Total modules found: $(echo '${{ steps.find-modules.outputs.directories }}' | jq 'length')"

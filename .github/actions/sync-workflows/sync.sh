@@ -13,9 +13,10 @@ if [[ -f "${repo_dir}/go.mod" ]]; then
 	types+=("go")
 fi
 
-if [[ -f "${repo_dir}/pyproject.toml" ]] || [[ -f "${repo_dir}/uv.lock" ]] || [[ -f "${repo_dir}/requirements.txt" ]]; then
-	types+=("python")
-fi
+# TODO: add python
+# if [[ -f "${repo_dir}/pyproject.toml" ]] || [[ -f "${repo_dir}/uv.lock" ]] || [[ -f "${repo_dir}/requirements.txt" ]]; then
+# 	types+=("python")
+# fi
 
 # Ensure workflows directory exists
 mkdir -p "${repo_dir}/.github/workflows"

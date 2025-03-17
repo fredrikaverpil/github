@@ -6,35 +6,44 @@ on:
       go-version:
         required: false
         type: string
-        default: 'stable' # rc versions are defined like 1.24.0-rc.3
+        default: 'stable'
       working-directory:
-        description: 'Directory to run golangci-lint in'
+        description: 'directory to run golangci-lint in (if specified, auto-detection is skipped)'
         required: false
         type: string
-        default: '.'
+        default: ''
       config-source:
-        description: 'Source for golangci-lint config (local, golden-latest, golden-revision, central)'
+        description: 'source for golangci-lint config'
         required: false
         type: string
         default: 'golden-latest'
       gist-revision:
-        description: 'Specific Gist revision SHA (used only with golden-revision source)'
+        description: 'specific Gist revision SHA'
         required: false
         type: string
         default: ''
 
 jobs:
+  find-dirs:
+    uses: ./.github/workflows/go-find-modules.yml
+    with:
+      working-directory: ${{ inputs.working-directory }}
+
   golangci:
     name: lint
+    needs: find-dirs
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: ${{ fromJson(needs.find-dirs.outputs.directories) }}
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ inputs.go-version }}
-      - name: golangci-lint
-        uses: fredrikaverpil/github/.github/actions/golangci-lint@main
+      - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
-          working-directory: ${{ inputs.working-directory }}
+          working-directory: ${{ matrix.directory }}
           config-source: ${{ inputs.config-source }}
           gist-revision: ${{ inputs.gist-revision }}
