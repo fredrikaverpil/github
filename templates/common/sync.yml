@@ -10,9 +10,12 @@ jobs:
     name: workflows
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: fredrikaverpil/github/.github/actions/sync-workflows@main
-      - uses: peter-evans/create-pull-request@v7
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: run sync-workflows action
+        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
+      - name: create pull request
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.WORKFLOW_PAT }}
           commit-message: "ci(workflows): sync with fredrikaverpil/github"
