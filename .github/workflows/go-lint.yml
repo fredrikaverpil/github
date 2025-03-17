@@ -7,6 +7,21 @@ on:
         required: false
         type: string
         default: 'stable' # rc versions are defined like 1.24.0-rc.3
+      working-directory:
+        description: 'Directory to run golangci-lint in'
+        required: false
+        type: string
+        default: '.'
+      config-source:
+        description: 'Source for golangci-lint config (local, golden-latest, golden-revision, central)'
+        required: false
+        type: string
+        default: 'golden-latest'
+      gist-revision:
+        description: 'Specific Gist revision SHA (used only with golden-revision source)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   golangci:
@@ -19,4 +34,7 @@ jobs:
           go-version: ${{ inputs.go-version }}
       - name: golangci-lint
         uses: fredrikaverpil/github/.github/actions/golangci-lint@main
-
+        with:
+          working-directory: ${{ inputs.working-directory }}
+          config-source: ${{ inputs.config-source }}
+          gist-revision: ${{ inputs.gist-revision }}
