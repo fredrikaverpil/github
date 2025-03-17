@@ -1,0 +1,39 @@
+name: sync-runner
+
+on:
+  workflow_call:
+    inputs:
+      pr-title:
+        required: false
+        type: string
+        default: 'chore: update workflows from central repo'
+    secrets:
+      WORKFLOW_PAT:
+        required: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Run sync action
+        id: sync
+        uses: fredrikaverpil/github/.github/actions/sync-action@main
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.WORKFLOW_PAT }}
+          commit-message: "${{ inputs.pr-title }}"
+          title: "${{ inputs.pr-title }}"
+          body: |
+            This PR updates the GitHub workflows from the central repository.
+
+            Project types detected: ${{ steps.sync.outputs.types }}
+            Features detected: ${{ steps.sync.outputs.features }}
+
+            Automated by the sync-workflows action.
+          branch: chore/update-workflows
+          delete-branch: true

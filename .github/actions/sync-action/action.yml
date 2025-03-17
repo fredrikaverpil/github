@@ -1,0 +1,64 @@
+name: "Sync Workflows Action"
+description: "Detects project types and syncs relevant templates"
+
+outputs:
+  types:
+    description: "Detected project types"
+    value: ${{ steps.detect.outputs.types }}
+  features:
+    description: "Detected project features"
+    value: ${{ steps.detect.outputs.features }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout central repository
+      uses: actions/checkout@v4
+      with:
+        repository: fredrikaverpil/github
+        path: central
+
+    - name: Detect project types
+      id: detect
+      shell: bash
+      run: |
+        # Execute the detection script from the action directory
+        chmod +x ${GITHUB_ACTION_PATH}/detect-project-types.sh
+        ${GITHUB_ACTION_PATH}/detect-project-types.sh
+
+    - name: Sync workflows
+      shell: bash
+      run: |
+        # Create directories if they don't exist
+        mkdir -p .github/workflows
+
+        # Copy common templates
+        cp central/templates/common/pr.yml .github/workflows/pr.yml
+
+        # Copy sync workflow itself (self-update)
+        cp central/templates/sync/sync.yml .github/workflows/sync.yml
+
+        # Copy dependabot config
+        mkdir -p .github
+        cp central/templates/common/dependabot.yml .github/dependabot.yml
+
+        # Extract detected types
+        TYPES="${{ steps.detect.outputs.types }}"
+
+        # Copy Go templates if needed
+        if [[ "$TYPES" == *"go"* ]]; then
+          echo "Adding Go workflows..."
+          cp central/templates/go/workflow.yml .github/workflows/go.yml
+        fi
+
+        # Copy Python templates if needed
+        if [[ "$TYPES" == *"python"* ]]; then
+          echo "Adding Python workflows..."
+          cp central/templates/python/workflow.yml .github/workflows/python.yml
+        fi
+
+        # Copy Lua templates if needed
+        if [[ "$TYPES" == *"lua"* ]]; then
+          echo "Adding Lua workflows..."
+          cp central/templates/lua/workflow.yml .github/workflows/lua.yml
+        fi
