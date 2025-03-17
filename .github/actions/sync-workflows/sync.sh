@@ -7,7 +7,6 @@ output_file="${3:-}"
 
 # Create array for detected types
 types=()
-features=("github-actions")
 
 # Detect project types
 if [[ -f "${repo_dir}/go.mod" ]]; then
@@ -36,5 +35,4 @@ done
 # Output for GitHub Actions
 if [[ -n "${output_file}" ]]; then
 	echo "types=${types[*]}" >>"${output_file}"
-	echo "features=${features[*]}" >>"${output_file}"
 fi

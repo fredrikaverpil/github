@@ -1,5 +1,7 @@
 name: golangci-lint
 
+description: run golangci-lint using local config or golden config
+
 inputs:
   working-directory:
     description: 'directory to run golangci-lint in'

@@ -2,7 +2,7 @@
 
 Central repository for GitHub Actions workflows and templates.
 
-## Quick Start
+## Quick Start: setting up a new GitHub project
 
 1. Create a Personal Access Token with required permissions:
 
@@ -14,7 +14,7 @@ Central repository for GitHub Actions workflows and templates.
 1. Add the token as a repository secret:
 
    - Go to your repository → Settings → Secrets and variables → Actions.
-   - Create a new secret named WORKFLOW_PAT with your token value.
+   - Create a new secret named `WORKFLOW_PAT` with your token value.
 
 1. Copy `templates/sync/sync.yml` to your repository's
    `.github/workflows/sync.yml`.

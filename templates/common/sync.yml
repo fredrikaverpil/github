@@ -1,4 +1,4 @@
-name: Sync reusable workflows
+name: sync
 
 on:
   workflow_dispatch:
@@ -10,29 +10,18 @@ jobs:
     name: workflows
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout current repository
-        uses: actions/checkout@v4
-
-      - name: Run sync workflows action
-        id: sync
-        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
-
-      - name: Clean up central checkout
-        run: |
-          # Remove the central repository checkout to avoid including it in the PR
-          rm -rf central
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+      - uses: actions/checkout@v4
+      - uses: fredrikaverpil/github/.github/actions/sync-workflows@main
+      - uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.WORKFLOW_PAT }}
           commit-message: "ci(workflows): sync with fredrikaverpil/github"
           title: "ci(workflows): sync with fredrikaverpil/github"
           body: |
-            This PR updates the GitHub repo with CI workflows from the
-            central fredrikaverpil/github repository.
+            This PR syncs the GitHub repo with CI workflows from the
+            [fredrikaverpil/github](https://github.com/fredrikaverpil/github)
+            repository.
 
             Project types detected: ${{ steps.sync.outputs.types }}
-            Features detected: ${{ steps.sync.outputs.features }}
-          branch: chore/update-workflows
+          branch: ci/sync-workflows
           delete-branch: true

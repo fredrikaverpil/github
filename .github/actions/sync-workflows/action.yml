@@ -1,35 +1,36 @@
-name: Reposync
-description: Syncs files onto project repository
+name: sync-workflows
+
+description: syncs workflows onto project repository
 
 outputs:
   types:
-    description: "Detected project types"
+    description: detected project types
     value: ${{ steps.detect.outputs.types }}
-  features:
-    description: "Detected project features"
-    value: ${{ steps.detect.outputs.features }}
 
 runs:
   using: "composite"
   steps:
-    - name: Checkout central repository
+    - name: checkout fredrikaverpil/github
       uses: actions/checkout@v4
       with:
         repository: fredrikaverpil/github
         path: central
 
-    - name: Make sync script executable
+    - name: make sync.sh executable
       shell: bash
       run: chmod +x central/.github/actions/sync-workflows/sync.sh
 
-    - name: Detect project types
+    - name: perform sync
       id: detect
       shell: bash
       run: |
         central/.github/actions/sync-workflows/sync.sh . central/templates $GITHUB_OUTPUT
 
-    - name: Display detected types
+    - name: display detected types
       shell: bash
       run: |
-        echo "Detected types: ${{ steps.detect.outputs.types }}"
-        echo "Detected features: ${{ steps.detect.outputs.features }}"
+        echo "detected types: ${{ steps.detect.outputs.types }}"
+
+    - name: cleanup
+      shell: bash
+      run: rm -rf central
