@@ -19,3 +19,4 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: v1.64
+          args: --config https://gist.githubusercontent.com/maratori/47a4d00457a92aa426dbd48a18776322/raw/dba9604b2f7fc0dff12c1ed793256ca2bc0111ab/.golangci.yml
