@@ -3,9 +3,9 @@ updates:
   # Configuration for GitHub Actions across multiple directories
   - package-ecosystem: "github-actions"
     directories:
-      - "/.github/workflows"
-      - "/.github/actions"
-      - "/templates"
+    - /
+    - .github/actions/*
+    - /templates
     schedule:
       interval: "weekly"
       day: "monday"
