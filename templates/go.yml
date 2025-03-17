@@ -1,0 +1,20 @@
+name: go
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 8 * * 1" # Monday at 8am
+
+jobs:
+  vuln:
+    uses: fredrikaverpil/github/.github/workflows/go-vuln.yml@main
+    secrets: inherit
+  lint:
+    uses: fredrikaverpil/github/.github/workflows/go-lint.yml@main
+    with:
+      config-source: golden-latest
+    secrets: inherit
