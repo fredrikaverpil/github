@@ -18,7 +18,7 @@ Central repository for GitHub Actions workflows and templates.
    - Go to your repository → Settings → Secrets and variables → Actions.
    - Create a new secret named `SYNC_WORKFLOW_TOKEN` with your token value.
 
-1. Copy `templates/sync/sync.yml` to your repository's
+1. Copy `templates/common/sync.yml` to your repository's
    `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Merge the PR it creates.
