@@ -9,7 +9,5 @@ jobs:
   sync:
     name: sync workflows with https://github.com/fredrikaverpil/github
     uses: fredrikaverpil/github/.github/workflows/sync-runner.yml@main
-    with:
-      pr-title: ${{ inputs.pr-title }}
     secrets:
       WORKFLOW_PAT: ${{ secrets.WORKFLOW_PAT }}
