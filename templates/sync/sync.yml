@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       branch-name:
-        description: 'Branch name for the PR'
+        description: 'branch name for the PR'
         required: false
         default: 'chore/update-workflows'
       pr-title:
@@ -14,7 +14,7 @@ on:
 
 jobs:
   sync:
-    name: Sync Workflows
+    name: sync Workflows
     uses: fredrikaverpil/github/.github/workflows/sync-runner.yml@main
     with:
       branch-name: ${{ inputs.branch-name }}
