@@ -5,10 +5,6 @@ inputs:
     description: 'directory to run golangci-lint in'
     required: false
     default: '.'
-  only-new-issues:
-    description: 'show only new issues'
-    required: false
-    default: 'false'
 
 runs:
   using: "composite"
@@ -33,6 +29,3 @@ runs:
 
     - name: run golangci-lint
       uses: golangci/golangci-lint-action@v6
-      with:
-        args: --timeout=30m --config=.golangci.yml --issues-exit-code=0
-        only-new-issues: ${{ inputs.only-new-issues }}
