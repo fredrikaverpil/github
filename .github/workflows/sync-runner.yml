@@ -15,7 +15,7 @@ jobs:
 
       - name: Run sync action
         id: sync
-        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
+        uses: fredrikaverpil/github/.github/actions/reposync@main
 
       - name: Clean up central checkout
         run: |
@@ -29,11 +29,10 @@ jobs:
           commit-message: "ci(workflows): sync with fredrikaverpil/github"
           title: "ci(workflows): sync with fredrikaverpil/github"
           body: |
-            This PR updates the GitHub workflows from the central repository.
+            This PR updates the GitHub repo with CI workflows from the
+            central fredrikaverpil/github repository.
 
             Project types detected: ${{ steps.sync.outputs.types }}
             Features detected: ${{ steps.sync.outputs.features }}
-
-            Automated by the sync-workflows action.
           branch: chore/update-workflows
           delete-branch: true
