@@ -1,21 +1,21 @@
-name: sync-runner
+name: Sync reusable workflows
 
 on:
-  workflow_call:
-    secrets:
-      WORKFLOW_PAT:
-        required: true
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1" # Monday at 8am
 
 jobs:
   sync:
+    name: workflows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v4
 
-      - name: Run sync action
+      - name: Run sync workflows action
         id: sync
-        uses: fredrikaverpil/github/.github/actions/reposync@main
+        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
 
       - name: Clean up central checkout
         run: |
