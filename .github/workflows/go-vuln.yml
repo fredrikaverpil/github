@@ -21,6 +21,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - id: govulncheck
         uses: golang/govulncheck-action@v1
+
   gosec:
     runs-on: ubuntu-latest
     strategy:
