@@ -1,12 +1,8 @@
 name: vuln
+
 on:
-  workflow_dispatch:
-  pull_request:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: "0 8 * * 1"
+  workflow_call:
+
 jobs:
   govulncheck:
     runs-on: ubuntu-latest
