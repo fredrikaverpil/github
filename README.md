@@ -4,7 +4,7 @@ Central repository for GitHub Actions workflows and templates.
 
 ## Quick Start
 
-1. Copy templates/sync/sync.yml to your repository's
+1. Copy `templates/sync/sync.yml` to your repository's
    `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Merge the PR it creates.
