@@ -1,6 +1,15 @@
 version: 2
 updates:
+  # Configuration for GitHub Actions across multiple directories
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories:
+      - "/.github/workflows"
+      - "/.github/actions"
+      - "/templates"
     schedule:
-      interval: weekly
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "github-actions"
