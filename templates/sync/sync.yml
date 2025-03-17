@@ -2,17 +2,12 @@ name: sync
 
 on:
   workflow_dispatch:
-    inputs:
-      pr-title:
-        description: 'PR title'
-        required: false
-        default: 'ci(workflows): sync with fredrikaverpil/github'
   schedule:
     - cron: "0 8 * * 1" # Monday at 8am
 
 jobs:
   sync:
-    name: sync workflows
+    name: sync workflows with https://github.com/fredrikaverpil/github
     uses: fredrikaverpil/github/.github/workflows/sync-runner.yml@main
     with:
       pr-title: ${{ inputs.pr-title }}
