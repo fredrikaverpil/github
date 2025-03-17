@@ -32,12 +32,6 @@ runs:
         curl -o ${{ inputs.working-directory }}/.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
 
     - name: run golangci-lint
-      shell: bash
-      run: |
-        cd ${{ inputs.working-directory }}
-        golangci-lint run ./...
-
-    - name: run golangci-lint
       uses: golangci/golangci-lint-action@v6
       with:
         args: --timeout=30m --config=.golangci.yml --issues-exit-code=0
