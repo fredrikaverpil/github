@@ -25,7 +25,7 @@ runs:
       if: steps.check-config.outputs.config == 'central'
       shell: bash
       run: |
-        curl -o ${{ inputs.working-directory }}/.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
+        curl -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
 
     - name: run golangci-lint
       uses: golangci/golangci-lint-action@v6
