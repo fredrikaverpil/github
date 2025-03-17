@@ -1,4 +1,4 @@
-name: sync
+name: Sync reusable workflows
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync:
-    name: sync workflows with https://github.com/fredrikaverpil/github
+    name: workflows
     uses: fredrikaverpil/github/.github/workflows/sync-runner.yml@main
     secrets:
       WORKFLOW_PAT: ${{ secrets.WORKFLOW_PAT }}
