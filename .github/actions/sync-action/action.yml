@@ -39,8 +39,8 @@ runs:
         cp central/templates/sync/sync.yml .github/workflows/sync.yml
 
         # Copy dependabot config
-        mkdir -p .github
-        cp central/templates/common/dependabot.yml .github/dependabot.yml
+        # mkdir -p .github
+        # cp central/templates/common/dependabot.yml .github/dependabot.yml
 
         # Extract detected types
         TYPES="${{ steps.detect.outputs.types }}"
