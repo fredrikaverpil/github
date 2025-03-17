@@ -1,0 +1,34 @@
+name: golangci-lint
+
+inputs:
+  working-directory:
+    description: 'directory to run golangci-lint in'
+    required: false
+    default: '.'
+
+runs:
+  using: "composite"
+  steps:
+    - name: check for local config
+      id: check-config
+      shell: bash
+      run: |
+        if [ -f "${{ inputs.working-directory }}/.golangci.yml" ]; then
+          echo "using local .golangci.yml"
+          echo "config=local" >> $GITHUB_OUTPUT
+        else
+          echo "using central .golangci.yml"
+          echo "config=central" >> $GITHUB_OUTPUT
+        fi
+
+    - name: setup central config if needed
+      if: steps.check-config.outputs.config == 'central'
+      shell: bash
+      run: |
+        curl -o ${{ inputs.working-directory }}/.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
+
+    - name: run golangci-lint
+      shell: bash
+      run: |
+        cd ${{ inputs.working-directory }}
+        golangci-lint run ./...
