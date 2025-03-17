@@ -5,6 +5,14 @@ inputs:
     description: 'directory to run golangci-lint in'
     required: false
     default: '.'
+  config-source:
+    description: 'source for golangci-lint config (local, golden-latest, golden-revision, central)'
+    required: false
+    default: 'golden-latest'
+  gist-revision:
+    description: 'specific Gist revision SHA (used only with golden-revision source)'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -13,19 +21,34 @@ runs:
       id: check-config
       shell: bash
       run: |
-        if [ -f "${{ inputs.working-directory }}/.golangci.yml" ]; then
+        if [ "${{ inputs.config-source }}" = "local" ] && [ -f "${{ inputs.working-directory }}/.golangci.yml" ]; then
           echo "using local .golangci.yml"
           echo "config=local" >> $GITHUB_OUTPUT
         else
-          echo "using central .golangci.yml"
-          echo "config=central" >> $GITHUB_OUTPUT
+          echo "config=${{ inputs.config-source }}" >> $GITHUB_OUTPUT
         fi
 
-    - name: setup central config if needed
+    - name: download golden-latest config
+      if: steps.check-config.outputs.config == 'golden-latest'
+      shell: bash
+      run: |
+        GIST_URL="https://gist.githubusercontent.com/maratori/47a4d00457a92aa426dbd48a18776322/raw/.golangci.yml"
+        curl -fsSL -o ./.golangci.yml $GIST_URL
+
+    - name: download golden-revision config
+      if: steps.check-config.outputs.config == 'golden-revision'
+      shell: bash
+      run: |
+        GIST_URL="https://gist.githubusercontent.com/maratori/47a4d00457a92aa426dbd48a18776322/raw/${{ inputs.gist-revision }}/.golangci.yml"
+        curl -fsSL -o ./.golangci.yml $GIST_URL
+
+    - name: setup central config
       if: steps.check-config.outputs.config == 'central'
       shell: bash
       run: |
-        curl -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
+        curl -fsSL -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
 
     - name: run golangci-lint
       uses: golangci/golangci-lint-action@v6
+      with:
+        working-directory: ${{ inputs.working-directory }}
