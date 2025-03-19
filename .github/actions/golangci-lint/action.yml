@@ -50,6 +50,12 @@ runs:
       run: |
         curl -fsSL -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
 
+    - name: show .golangci.yml
+      shell: bash
+      run: |
+        ls -alh
+        cat ./.golangci.yml
+
     - name: run golanci-lint
       shell: bash
       run: go tool -modfile=go.tool.mod golangci-lint --config=./.golangci.yml run
