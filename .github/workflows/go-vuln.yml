@@ -5,7 +5,7 @@ on:
 
 jobs:
   find-dirs:
-    uses: ./.github/workflows/find-dirs.yml
+    uses: fredrikaverpil/github/.github/workflows/find-dirs.yml@main
     with:
       file_patterns: go.mod
 
