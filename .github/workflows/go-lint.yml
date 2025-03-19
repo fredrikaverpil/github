@@ -24,17 +24,28 @@ on:
         default: ''
 
 jobs:
+  find-dirs:
+    uses: ./.github/workflows/find-dirs.yml
+    with:
+      file_patterns: go.mod
+
   golangci:
-    name: lint
+    name: lint-${{ matrix.dir }}
+    needs: find-dirs
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.find-dirs.outputs.matrix) }}
+    env:
+      GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: ${{ inputs.go-version }}
+          go-version-file: ${{ matrix.dir }}/go.mod
       - name: golangci-lint
         uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
-          working-directory: ${{ inputs.working-directory }}
+          working-directory: ${{ matrix.dir }}
           config-source: ${{ inputs.config-source }}
           gist-revision: ${{ inputs.gist-revision }}

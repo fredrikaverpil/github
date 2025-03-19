@@ -1,0 +1,60 @@
+name: find directories
+
+on:
+  workflow_call:
+    inputs:
+      file_patterns:
+        description: Comma-separated list of file patterns to search for (e.g., "uv.lock,pyproject.toml")
+        required: true
+        type: string
+    outputs:
+      matrix:
+        description: JSON matrix of directories containing the specified files
+        value: ${{ jobs.scan.outputs.matrix }}
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-dirs.outputs.matrix }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Find directories with go.mod
+        id: find-dirs
+        shell: python
+        run: |
+          import os
+          import json
+          import glob
+
+          # Get input parameters
+          file_patterns = "${{ inputs.file_patterns }}".split(',')
+
+          # Set to track unique directories
+          directories = set()
+
+          # Find all matching files
+          for pattern in file_patterns:
+              pattern = pattern.strip()
+              matching_files = glob.glob(f'**/{pattern}', recursive=True)
+
+              # Extract directories
+              for file_path in matching_files:
+                  # Use '.' for the root directory
+                  dir_path = os.path.dirname(file_path) or '.'
+                  directories.add(dir_path)
+
+          # Extract directories
+          dirs = [os.path.dirname(f) or '.' for f in files]
+
+          # Format as JSON matrix
+          matrix = json.dumps({"dirs": dirs})
+
+          # Output the matrix
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"matrix={matrix}\n")
+
+          # Print for debugging
+          print(f"Found directories: {go_dirs}")
