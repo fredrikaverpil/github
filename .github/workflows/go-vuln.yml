@@ -45,6 +45,6 @@ jobs:
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
       - run: go version
-      - run: gosec ./...
+      - run: go -tool gosec ./...
         working-directory: ${{ matrix.dir }}
 
