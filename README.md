@@ -40,3 +40,22 @@ automatically.
 - `.github/actions` - Composite actions that can be used in workflows.
 - `templates` - Workflow templates organized by project type to be synced to
   other repositories.
+
+## Tools setup
+
+The reusable workflows and composite actions expects tooling in the GitHub
+projects.
+
+### Go
+
+For each `go.mod` location:
+
+```sh
+go mod init -modfile=go.tool.mod example.com
+go get -tool -modfile=go.tool.mod github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@latest
+go get -tool -modfile=go.tool.mod github.com/securego/gosec/v2/cmd/gosec@latest
+go get -tool -modfile=go.tool.mod github.com/daixiang0/gci@latest
+go get -tool -modfile=go.tool.mod mvdan.cc/gofumpt@latest
+go get -tool -modfile=go.tool.mod github.com/segmentio/golines@latest
+```
