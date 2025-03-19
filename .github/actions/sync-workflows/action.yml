@@ -5,19 +5,19 @@ description: syncs workflows onto project repository
 runs:
   using: "composite"
   steps:
-    - name: Set environment variable
+    - name: set environment variable
       shell: bash
       run: |
         echo "TMP_REPO_PATH=.tmp_repo" >> $GITHUB_ENV
 
-    - name: checkout fredrikaverpil/github
+    - name: checkout fredrikaverpil/github into temporary directory
       uses: actions/checkout@v4
       with:
         repository: fredrikaverpil/github
         path: ${{ env.TMP_REPO_PATH }}
         ref: main
 
-    - name: perform sync
+    - name: perform workflows sync
       shell: bash
       run: |
         python ${{ env.TMP_REPO_PATH }}/.github/actions/sync-workflows/sync.py . ${{ env.TMP_REPO_PATH }}/templates
