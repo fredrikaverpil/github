@@ -46,8 +46,8 @@ jobs:
                   dir_path = os.path.dirname(file_path) or '.'
                   directories.add(dir_path)
 
-          # Extract directories
-          dirs = [os.path.dirname(f) or '.' for f in files]
+          # Convert to sorted list
+          dir_list = sorted(list(directories))
 
           # Format as JSON matrix
           matrix = json.dumps({"dirs": dirs})
