@@ -35,7 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.find-dirs.outputs.matrix) }}
+      matrix:
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix) }}
     env:
       GOTOOLCHAIN: local
     steps:
