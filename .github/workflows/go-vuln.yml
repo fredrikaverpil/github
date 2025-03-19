@@ -45,6 +45,7 @@ jobs:
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
       - run: go version
-      - run: go -tool gosec ./...
+      - run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+      - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
