@@ -52,6 +52,7 @@ For each `go.mod` location:
 
 ```sh
 go mod init -modfile=go.tool.mod example.com
+# go get -tool -modfile=go.tool.mod golang.org/x/tools/gopls@latest
 go get -tool -modfile=go.tool.mod github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@latest
 go get -tool -modfile=go.tool.mod github.com/securego/gosec/v2/cmd/gosec@latest
@@ -61,6 +62,10 @@ go get -tool -modfile=go.tool.mod mvdan.cc/gofumpt@latest
 go get -tool -modfile=go.tool.mod github.com/segmentio/golines@latest
 go mod tidy -modfile=go.tool.mod
 ```
+
+> [!TODO]
+> 
+> Add `gopls`.
 
 <details>
 <summary>More on `go tool` usage</summary>
