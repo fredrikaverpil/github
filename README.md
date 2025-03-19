@@ -78,6 +78,9 @@ $ go tool -modfile=go.tool.mod govulncheck
 # List all tools added to the module
 $ go list -modfile=go.tool.mod tool
 
+# Install all tools into ~/go/bin
+$ go install -modfile=go.tool.mod tool
+
 # Verify the integrity of the tool dependencies
 $ go mod verify -modfile=go.tool.mod
 
