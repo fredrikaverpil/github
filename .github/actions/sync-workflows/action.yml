@@ -20,7 +20,7 @@ runs:
     - name: perform sync
       shell: bash
       run: |
-        python ${{ env.TMP_REPO_PATH }}/.github/actions/sync-workflows/sync.py . central/templates
+        python ${{ env.TMP_REPO_PATH }}/.github/actions/sync-workflows/sync.py . ${{ env.TMP_REPO_PATH }}/templates
 
     - name: cleanup
       shell: bash
