@@ -44,6 +44,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
+      - run: go version
       - name: golangci-lint
         uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
