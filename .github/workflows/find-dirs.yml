@@ -50,11 +50,12 @@ jobs:
           dir_list = sorted(list(directories))
 
           # Format as JSON matrix
-          matrix = json.dumps({"dirs": dirs})
+          matrix = json.dumps({output_name: dir_list})
 
           # Output the matrix
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"matrix={matrix}\n")
 
           # Print for debugging
-          print(f"Found directories: {go_dirs}")
+          print(f"Found directories: {dir_list}")
+          print(f"File patterns searched: {file_patterns}")
