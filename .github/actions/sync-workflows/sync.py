@@ -26,6 +26,7 @@ def main():
     if os.path.isdir(common_dir):
         for file in os.listdir(common_dir):
             if file.endswith(".yml"):
+                print(f"Copying common workflow template: {file}")
                 shutil.copy(
                     os.path.join(common_dir, file), os.path.join(workflows_dir, file)
                 )
