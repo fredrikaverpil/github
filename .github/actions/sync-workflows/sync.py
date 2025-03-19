@@ -23,10 +23,11 @@ def main():
 
     # Copy common templates if they exist
     common_dir = os.path.join(template_dir, "common")
+    print("Copying common workflow templates...")
     if os.path.isdir(common_dir):
         for file in os.listdir(common_dir):
             if file.endswith(".yml"):
-                print(f"Copying common workflow template: {file}")
+                print(f"  - {file}")
                 shutil.copy(
                     os.path.join(common_dir, file), os.path.join(workflows_dir, file)
                 )
@@ -52,9 +53,10 @@ def main():
 
         # If found, copy the corresponding workflow template
         if found:
+            print(f"Found {workflow_name} project, copying workflow template...")
             template_file = os.path.join(template_dir, f"{workflow_name}.yml")
             if os.path.isfile(template_file):
-                print(f"Found {workflow_name} project, copying workflow template")
+                print(f"  - {workflow_name}.yml")
                 shutil.copy(
                     template_file, os.path.join(workflows_dir, f"{workflow_name}.yml")
                 )
