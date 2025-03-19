@@ -12,6 +12,8 @@ on:
 jobs:
   vuln:
     uses: fredrikaverpil/github/.github/workflows/go-vuln.yml@main
+  format:
+    uses: fredrikaverpil/github/.github/workflows/go-format.yml@main
   lint:
     uses: fredrikaverpil/github/.github/workflows/go-lint.yml@main
     with:
