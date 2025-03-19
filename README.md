@@ -1,6 +1,7 @@
 # github
 
-Central repository for GitHub Actions workflows and templates.
+Central GitHub Actions repo, hosting reusable workflows, composite actions and
+template workflows for open source projects by @fredrikaverpil.
 
 ## Quick Start: setting up a new GitHub project
 
