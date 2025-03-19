@@ -55,7 +55,44 @@ go mod init -modfile=go.tool.mod example.com
 go get -tool -modfile=go.tool.mod github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@latest
 go get -tool -modfile=go.tool.mod github.com/securego/gosec/v2/cmd/gosec@latest
+go get -tool -modfile=go.tool.mod golang.org/x/tools/cmd/goimports@latest
 go get -tool -modfile=go.tool.mod github.com/daixiang0/gci@latest
 go get -tool -modfile=go.tool.mod mvdan.cc/gofumpt@latest
 go get -tool -modfile=go.tool.mod github.com/segmentio/golines@latest
+go mod tidy -modfile=go.tool.mod
 ```
+
+<details>
+<summary>More on `go tool` usage</summary>
+
+```sh
+# Initialize a go.tool.mod modfile
+$ go mod init -modfile=go.tool.mod example.com
+
+# Add a tool to the module
+$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck
+
+# Run the tool from the command line
+$ go tool -modfile=go.tool.mod govulncheck
+
+# List all tools added to the module
+$ go list -modfile=go.tool.mod tool
+
+# Verify the integrity of the tool dependencies
+$ go mod verify -modfile=go.tool.mod
+
+# Upgrade or downgrade a tool to a specific version
+$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@v1.1.2
+
+# Upgrade all tools to their latest version
+$ go get -modfile=go.tool.mod tool
+
+# Remove a tool from the module
+$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@none
+```
+
+</details>
+
+> [!TODO]
+>
+> Dependabot cannot pick up on `go.tool.mod` 😢 so tools should probably be stored directly in the `go.mod` instead.
