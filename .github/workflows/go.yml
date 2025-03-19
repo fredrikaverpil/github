@@ -46,8 +46,7 @@ jobs:
       - run: go tool -modfile=go.tool.mod gci write --skip-generated --skip-vendor -s standard -s default .
       - run: go tool -modfile=go.tool.mod golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
 
-  golangci:
-    name: lint-${{ matrix.dir }}
+  golangci-lint:
     needs: find-dirs
     runs-on: ubuntu-latest
     strategy:
