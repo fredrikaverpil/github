@@ -93,6 +93,6 @@ $ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@none
 
 </details>
 
-> [!TODO]
+> [!NOTE]
 >
 > Dependabot cannot pick up on `go.tool.mod` 😢 so tools should probably be stored directly in the `go.mod` instead.
