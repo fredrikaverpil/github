@@ -60,14 +60,12 @@ runs:
       shell: bash
       run: go tool -modfile=go.tool.mod golangci-lint help linters
 
-    # FIXME: run from project (but for some reason linters are missing)
-    # Failed executing command with error: unknown linters: 'exptostd,iface,nilnesserr,recvcheck,usetesting', run 'golangci-lint help linters' to see the list of supported linters
-    # - name: run golanci-lint
-    #   shell: bash
-    #   run: go tool -modfile=go.tool.mod golangci-lint --config=./.golangci.yml run
-    #   working-directory: ${{ inputs.working-directory }}
+    - name: run golanci-lint
+      shell: bash
+      run: go tool -modfile=go.tool.mod golangci-lint --config=./.golangci.yml run
+      working-directory: ${{ inputs.working-directory }}
 
-    - name: run golangci-lint
-      uses: golangci/golangci-lint-action@v6
-      with:
-        working-directory: ${{ inputs.working-directory }}
+    # - name: run golangci-lint
+    #   uses: golangci/golangci-lint-action@v6
+    #   with:
+    #     working-directory: ${{ inputs.working-directory }}
