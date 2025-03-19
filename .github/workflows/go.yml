@@ -46,7 +46,9 @@ jobs:
       - run: go tool -modfile=go.tool.mod goimports -w .
       - run: go tool -modfile=go.tool.mod gci write --skip-generated --skip-vendor -s standard -s default .
       - run: go tool -modfile=go.tool.mod gofumpt
-      - run: go tool -modfile=go.tool.mod golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
+      # FIXME: FATAL Error formatting source: exec: "gofumpt": executable file not found in $PATH
+      # - run: go tool -modfile=go.tool.mod golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
+      - run: go tool -modfile=go.tool.mod golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
       - run: git diff --exit-code
 
   golangci-lint:
