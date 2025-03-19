@@ -63,7 +63,7 @@ go get -tool -modfile=go.tool.mod github.com/segmentio/golines@latest
 go mod tidy -modfile=go.tool.mod
 ```
 
-> [!TODO]
+> [!NOTE]
 > 
 > Add `gopls`.
 
