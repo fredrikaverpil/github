@@ -5,11 +5,11 @@ import shutil
 
 def main():
     # Get central repo path from environment variable
-    central_path = os.environ.get("TMP_REPO_PATH", ".tmp_repo")
+    tmp_repo_path = os.environ.get("TMP_REPO_PATH", ".tmp_repo")
 
     # Parse arguments
     repo_dir = sys.argv[1] if len(sys.argv) > 1 else "."
-    template_dir = sys.argv[2] if len(sys.argv) > 2 else f"{central_path}/templates"
+    template_dir = sys.argv[2] if len(sys.argv) > 2 else f"{tmp_repo_path}/templates"
 
     # Define workflow templates and their associated file indicators
     workflow_mapping = {
