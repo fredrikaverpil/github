@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dir: ${{ fromJson(needs.find-dirs.outputs.matrix) }}
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
     env:
       GOTOOLCHAIN: local
     steps:
@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dir: ${{ fromJson(needs.find-dirs.outputs.matrix) }}
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
     env:
       GOTOOLCHAIN: local
     steps:
