@@ -2,35 +2,26 @@ name: sync-workflows
 
 description: syncs workflows onto project repository
 
-outputs:
-  types:
-    description: detected project types
-    value: ${{ steps.detect.outputs.types }}
-
 runs:
   using: "composite"
   steps:
+    - name: Set environment variable
+      shell: bash
+      run: |
+        echo "TMP_REPO_PATH=.tmp_repo" >> $GITHUB_ENV
+
     - name: checkout fredrikaverpil/github
       uses: actions/checkout@v4
       with:
         repository: fredrikaverpil/github
-        path: central
-
-    - name: make sync.sh executable
-      shell: bash
-      run: chmod +x central/.github/actions/sync-workflows/sync.sh
+        path: ${{ env.TMP_REPO_PATH }}
+        ref: main
 
     - name: perform sync
-      id: detect
       shell: bash
       run: |
-        central/.github/actions/sync-workflows/sync.sh . central/templates $GITHUB_OUTPUT
-
-    - name: display detected types
-      shell: bash
-      run: |
-        echo "detected types: ${{ steps.detect.outputs.types }}"
+        python ${{ env.TMP_REPO_PATH }}/.github/actions/sync-workflows/sync.py . central/templates
 
     - name: cleanup
       shell: bash
-      run: rm -rf central
+      run: rm -rf ${{ env.TMP_REPO_PATH }}
