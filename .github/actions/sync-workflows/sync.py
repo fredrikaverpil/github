@@ -54,11 +54,12 @@ def main():
         # If found, copy the corresponding workflow template
         if found:
             print(f"Found {workflow_name} project, copying workflow template...")
-            template_file = os.path.join(template_dir, f"{workflow_name}.yml")
+            template_file = os.path.join(template_dir, f"sync-{workflow_name}.yml")
             if os.path.isfile(template_file):
                 print(f"  - {workflow_name}.yml")
                 shutil.copy(
-                    template_file, os.path.join(workflows_dir, f"{workflow_name}.yml")
+                    template_file,
+                    os.path.join(workflows_dir, f"sync-{workflow_name}.yml"),
                 )
 
 
