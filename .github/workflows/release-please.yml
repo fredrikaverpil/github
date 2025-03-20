@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # https://github.com/googleapis/release-please-action#package-options
       - name: Check for config and manifest files
         id: check-files
         run: |
@@ -28,6 +29,8 @@ jobs:
             echo "manifest=" >> $GITHUB_OUTPUT
           fi
 
+      # https://github.com/googleapis/release-please-action
+      # https://github.com/googleapis/release-please/blob/main/docs/customizing.md
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.SYNC_TOKEN }}
