@@ -54,7 +54,7 @@ jobs:
         id: tools-cache
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('${{ github.workspace }}/tools/go.mod') }}
       - name: Install Go tools
         # NOTE: when using 'stable', the cache is always hit, so we might not want this:
         # if: steps.tools-cache.outputs.cache-hit != 'true'
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-${{ hashFiles('${{ github.workspace }}/tools/go.mod') }}
       - run: goimports -w .
       - run: gci write --skip-generated --skip-vendor -s standard -s default .
       - run: gofumpt
@@ -106,7 +106,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-${{ hashFiles('${{ github.workspace }}/tools/go.mod') }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -175,7 +175,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-${{ hashFiles('${{ github.workspace }}/tools/go.mod') }}
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
