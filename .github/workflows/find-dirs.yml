@@ -7,6 +7,10 @@ on:
         description: Comma-separated list of file patterns to search for (e.g., "uv.lock,pyproject.toml")
         required: true
         type: string
+      exclude_patterns:
+        description: Comma-separated list of directories to exclude (e.g., "tools,vendor")
+        required: false
+        type: string
     outputs:
       matrix:
         description: JSON matrix of directories containing the specified files
@@ -21,16 +25,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Find directories with go.mod
+      - name: Find directories with specified files
         id: find-dirs
         shell: python
+        # `tools` - to exclude all directories named "tools" anywhere in the repository
+        # `/tools` or `./tools` - to exclude only the root-level tools directory
+        # `**/internal/tools` - to exclude any "tools" directory inside an "internal" directory
+        # `src/*/tools` - to exclude "tools" directories that are direct children of any directory under "src"
         run: |
           import os
           import json
           import glob
+          import fnmatch
 
           # Get input parameters
           file_patterns = "${{ inputs.file_patterns }}".split(',')
+          exclude_patterns = "${{ inputs.exclude_patterns }}".split(',')
+          exclude_patterns = [p.strip() for p in exclude_patterns if p.strip()]
 
           # Set to track unique directories
           directories = set()
@@ -46,8 +57,30 @@ jobs:
                   dir_path = os.path.dirname(file_path) or '.'
                   directories.add(dir_path)
 
+          # Filter directories based on exclude patterns
+          filtered_directories = set()
+          for dir_path in directories:
+              should_keep = True
+              
+              for exclude_pattern in exclude_patterns:
+                  # Handle root directory pattern specifically
+                  if exclude_pattern.startswith('./'):
+                      exclude_pattern = exclude_pattern[2:]
+                  
+                  # Convert to path-like format for proper matching
+                  formatted_dir = dir_path
+                  
+                  # Check if the directory matches the exclude pattern
+                  if fnmatch.fnmatch(formatted_dir, exclude_pattern):
+                      should_keep = False
+                      print(f"Excluding directory {dir_path} (matched pattern {exclude_pattern})")
+                      break
+              
+              if should_keep:
+                  filtered_directories.add(dir_path)
+
           # Convert to sorted list
-          dir_list = sorted(list(directories))
+          dir_list = sorted(list(filtered_directories))
 
           # Format as JSON matrix
           matrix = json.dumps({"dir": dir_list})
@@ -58,4 +91,5 @@ jobs:
 
           # Print for debugging
           print(f"Found directories: {dir_list}")
+          print(f"Excluded patterns: {exclude_patterns}")
           print(f"File patterns searched: {file_patterns}")
