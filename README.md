@@ -1,8 +1,9 @@
 # github
 
-Central GitHub Actions repo, hosting reusable workflows, composite actions and
-template workflows for GitHub projects by
-[@fredrikaverpil](https://github.com/fredrikaverpil).
+Central GitHub Actions repo, hosting
+[reusable workflows](https://docs.github.com/en/actions/sharing-automations/reusing-workflows),
+[composite actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
+and template workflows for my personal projects.
 
 ## Quick Start: setting up a new GitHub project
 
@@ -126,11 +127,4 @@ more details.
 ## To do
 
 - [ ] Project repo config file or dot-folder (into which we move `tools`)?
-  - [ ] Supply versions matrix. Ability to run Go projects on version from
-        `go.mod` but then also `stable` and potentially an rc-release. Supply
-        Python versions matrix.
-  - [ ] Ability to ignore syncing over specific `sync-<lang>.yml` workflow
-        template.
 - [ ] Generate `dependabot.yml` for all found languages.
-- [ ] Move reusable workflows to `./reusable-workflows`.
-- [ ] Move actions to `./composite-actions`.
