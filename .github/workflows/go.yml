@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: find-dirs
-        uses: fredrikaverpil/github/composite-actions/find-dirs@main
+        uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
           file_patterns: go.mod
           exclude_patterns: /tools
@@ -98,7 +98,7 @@ jobs:
         with:
           path: ~/go/bin
           key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
-      - uses: fredrikaverpil/github/composite-actions/golangci-lint@main
+      - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
           config-source: ${{ inputs.config-source }}
