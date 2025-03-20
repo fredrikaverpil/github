@@ -125,9 +125,10 @@ more details.
 
 ## To do
 
-- [ ] Supply versions matrix. Ability to run Go projects on version from
-      `go.mod` but then also `stable` and potentially an rc-release. Supply
-      Python versions matrix.
-- [ ] Ability to ignore syncing over specific `sync-<lang>.yml` workflow
-      template.
+- [ ] Project repo config file or dot-folder (into which we move `tools`)?
+  - [ ] Supply versions matrix. Ability to run Go projects on version from
+        `go.mod` but then also `stable` and potentially an rc-release. Supply
+        Python versions matrix.
+  - [ ] Ability to ignore syncing over specific `sync-<lang>.yml` workflow
+        template.
 - [ ] Generate `dependabot.yml` for all found languages.
