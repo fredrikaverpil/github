@@ -35,26 +35,26 @@ runs:
       shell: bash
       run: |
         GIST_URL="https://gist.githubusercontent.com/maratori/47a4d00457a92aa426dbd48a18776322/raw/.golangci.yml"
-        curl -fsSL -o ./.golangci.yml $GIST_URL
+        curl -fsSL -o ${{ github.workspace }}/.golangci.yml $GIST_URL
 
     - name: download golden-revision config
       if: steps.check-config.outputs.config == 'golden-revision'
       shell: bash
       run: |
         GIST_URL="https://gist.githubusercontent.com/maratori/47a4d00457a92aa426dbd48a18776322/raw/${{ inputs.gist-revision }}/.golangci.yml"
-        curl -fsSL -o ./.golangci.yml $GIST_URL
+        curl -fsSL -o ${{ github.workspace }}/.golangci.yml $GIST_URL
 
     - name: setup central config
       if: steps.check-config.outputs.config == 'central'
       shell: bash
       run: |
-        curl -fsSL -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
+        curl -fsSL -o ${{ github.workspace }}/.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
 
     - name: show .golangci.yml
       shell: bash
       run: |
         ls -alh
-        cat ./.golangci.yml
+        cat ${{ github.workspace }}/.golangci.yml
 
     - name: show supported linters
       shell: bash
@@ -62,7 +62,7 @@ runs:
 
     - name: run golanci-lint
       shell: bash
-      run: golangci-lint --config=./.golangci.yml run
+      run: golangci-lint --config=${{ github.workspace }}/.golangci.yml run
       working-directory: ${{ inputs.working-directory }}
 
   # - name: run golangci-lint
