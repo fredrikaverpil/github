@@ -72,7 +72,7 @@ go mod tidy
 > available for all CI steps... 🤔 That way I wouldn't need to mix production
 > dependencies with CI dependencies in the same `go.mod` file, and Dependabot
 > would be able to tend to all updates.
->
+
 > [!NOTE]
 >
 > Experimental use of `golang.org/x/tools/gopls@latest` is done in CI without
