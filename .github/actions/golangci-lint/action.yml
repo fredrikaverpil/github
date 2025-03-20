@@ -58,11 +58,11 @@ runs:
 
     - name: show supported linters
       shell: bash
-      run: go tool -modfile=go.tool.mod golangci-lint help linters
+      run: go tool golangci-lint help linters
 
     - name: run golanci-lint
       shell: bash
-      run: go tool -modfile=go.tool.mod golangci-lint --config=./.golangci.yml run
+      run: go tool golangci-lint --config=./.golangci.yml run
       working-directory: ${{ inputs.working-directory }}
 
     # - name: run golangci-lint
