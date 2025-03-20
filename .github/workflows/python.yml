@@ -45,3 +45,21 @@ jobs:
       - run: uv run ruff check --diff src tests
       - run: uv run ruff format --diff src tests
 
+  type:
+    needs: [find-dirs]
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
+        python-version: ${{ fromJson(inputs.python-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - run: uv sync --group types
+      - run: uv run mypy src
