@@ -3,6 +3,15 @@ import sys
 import shutil
 
 
+def copy_if_not_exists(src, dst):
+    """Copy file only if it doesn't already exist in destination."""
+    if os.path.exists(dst):
+        print(f"  - Skipping {os.path.basename(dst)} (already exists)")
+        return False
+    shutil.copy(src, dst)
+    return True
+
+
 def main():
     # Get central repo path from environment variable
     tmp_repo_path = os.environ.get("TMP_REPO_PATH", ".tmp_repo")
@@ -56,11 +65,9 @@ def main():
             print(f"Found {workflow_name} project, copying workflow template...")
             template_file = os.path.join(template_dir, f"sync-{workflow_name}.yml")
             if os.path.isfile(template_file):
-                print(f"  - {workflow_name}.yml")
-                shutil.copy(
-                    template_file,
-                    os.path.join(workflows_dir, f"sync-{workflow_name}.yml"),
-                )
+                dst_file = os.path.join(workflows_dir, f"sync-{workflow_name}.yml")
+                if copy_if_not_exists(template_file, dst_file):
+                    print(f"  - {workflow_name}.yml")
 
 
 if __name__ == "__main__":
