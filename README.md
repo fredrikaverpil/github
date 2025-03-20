@@ -17,7 +17,7 @@ The sync workflow detects your project type and adds all relevant workflows
 automatically.
 
 <details>
-<summary>A token is required for `sync.yml` to run, expand to see details.</summary>
+<summary>A token is required for the sync, expand to see details.</summary>
 
 1. Create a Personal Access Token (PAT) with required permissions:
 
