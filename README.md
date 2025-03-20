@@ -51,10 +51,12 @@ projects.
 
 ### Go
 
-For each `go.mod` location, add tools:
+Add tools into the repo's `tools/go.mod`:
 
 ```sh
-go mod init example.com
+mkdir tools && cd tools
+go mod init github.com/fredrikaverpil/<project>/tools
+
 go get -tool github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go get -tool golang.org/x/vuln/cmd/govulncheck@latest
 go get -tool github.com/securego/gosec/v2/cmd/gosec@latest
@@ -62,16 +64,9 @@ go get -tool golang.org/x/tools/cmd/goimports@latest
 go get -tool github.com/daixiang0/gci@latest
 go get -tool mvdan.cc/gofumpt@latest
 go get -tool github.com/segmentio/golines@latest
+
 go mod tidy
 ```
-
-> [!NOTE]
->
-> I should store all tools just once, in a `tools/go.mod`, and have CI install
-> those with `go install tool` which would put all binaries in `~/go/bin` and
-> readily available for all CI steps... 🤔 That way I wouldn't need to mix
-> production dependencies with CI dependencies in the same `go.mod` file, and
-> Dependabot would be able to tend to all updates.
 
 > [!NOTE]
 >
