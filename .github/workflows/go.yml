@@ -36,8 +36,12 @@ jobs:
           exclude_patterns: /tools
 
   setup-tools:
-    # FIXME: run on all go/os versions
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
