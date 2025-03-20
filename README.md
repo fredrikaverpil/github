@@ -48,7 +48,7 @@ projects.
 
 ### Go
 
-For each `go.mod` location:
+For each `go.mod` location, add tools:
 
 ```sh
 go mod init example.com
@@ -100,3 +100,19 @@ $ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@none
 ```
 
 </details>
+
+### Python
+
+For each `uv.lock` file, add tools to the `pyproject.toml`'s
+[PEP-735 `dependency-groups`](https://peps.python.org/pep-0735/):
+
+```sh
+uv init
+uv add ruff --group linting
+uv add mypy --group typing
+uv add pytest --group testing
+uv sync --all-groups
+```
+
+See official [`uv tool` docs](https://docs.astral.sh/uv/concepts/tools/) for
+more details.
