@@ -1,0 +1,28 @@
+name: Find Directories
+description: Find directories containing specific file patterns while respecting exclusion patterns
+
+inputs:
+  file_patterns:
+    description: Comma-separated list of file patterns to search for (e.g., "uv.lock,pyproject.toml")
+    required: true
+  exclude_patterns:
+    description: Comma-separated list of directories to exclude (e.g., "tools,vendor")
+    required: false
+    default: ""
+
+outputs:
+  matrix:
+    description: JSON matrix of directories containing the specified files
+    value: ${{ steps.find-dirs.outputs.matrix }}
+
+runs:
+  using: composite
+  steps:
+    - name: Find directories with specified files
+      id: find-dirs
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/find_dirs.py \
+          --file-patterns "${{ inputs.file_patterns }}" \
+          --exclude-patterns "${{ inputs.exclude_patterns }}" \
+          --output "$GITHUB_OUTPUT"

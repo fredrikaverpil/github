@@ -1,0 +1,26 @@
+name: Test Find Dirs Action
+
+on:
+  push:
+    paths:
+      - '.github/actions/find-dirs/**'
+  pull_request:
+    paths:
+      - '.github/actions/find-dirs/**'
+  workflow_dispatch:
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          
+      - name: Run unit tests
+        run: |
+          cd .github/actions/find-dirs
+          python -m unittest test_find_dirs.py

@@ -25,10 +25,16 @@ on:
 
 jobs:
   find-dirs:
-    uses: fredrikaverpil/github/.github/workflows/find-dirs.yml@main
-    with:
-      file_patterns: go.mod
-      exclude_patterns: /tools
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-dirs.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find-dirs
+        uses: fredrikaverpil/github/.github/actions/find-dirs@main
+        with:
+          file_patterns: go.mod
+          exclude_patterns: /tools
 
   setup-tools:
     runs-on: ubuntu-latest
