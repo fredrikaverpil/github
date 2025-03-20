@@ -132,3 +132,5 @@ more details.
   - [ ] Ability to ignore syncing over specific `sync-<lang>.yml` workflow
         template.
 - [ ] Generate `dependabot.yml` for all found languages.
+- [ ] Move reusable workflows to `./reusable-workflows`.
+- [ ] Move actions to `./composite-actions`.
