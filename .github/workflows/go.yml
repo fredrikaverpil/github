@@ -107,7 +107,7 @@ jobs:
           go-version-file: ${{ matrix.dir }}/go.mod
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts
       - run: go install golang.org/x/tools/gopls@latest
-      - run: gopls ./...
+      - run: gopls stats
         working-directory: ${{ matrix.dir }}
 
   gosec:
