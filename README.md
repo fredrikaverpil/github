@@ -14,7 +14,7 @@ and template workflows for my personal projects.
 1. Run the workflow manually from the Actions tab.
 1. Merge the PR it creates.
 
-The sync workflow detects your project type and adds all relevant workflows
+The sync workflow performs detection and syncs over relevant workflows
 automatically.
 
 <details>
