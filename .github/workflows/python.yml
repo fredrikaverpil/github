@@ -26,6 +26,7 @@ jobs:
           file_patterns: uv.lock
 
   lint:
+    needs: [find-dirs]
     strategy:
       fail-fast: false
       matrix:
