@@ -70,8 +70,9 @@ go mod tidy
 > Perhaps I should store all tools in a `tools/go.mod` and have CI install those
 > with `go install tool` which would put all binaries in `~/go/bin` and readily
 > available for all CI steps... 🤔 That way I wouldn't need to mix production
-> dependencies with CI dependencies.
-
+> dependencies with CI dependencies in the same `go.mod` file, and Dependabot
+> would be able to tend to all updates.
+>
 > [!NOTE]
 >
 > Experimental use of `golang.org/x/tools/gopls@latest` is done in CI without
