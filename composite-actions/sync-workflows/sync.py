@@ -18,8 +18,8 @@ def main():
     }
 
     # Ensure workflows directory exists
-    reusable_workflows_dir = os.path.join(repo_dir, "reusable-workflows")
-    os.makedirs(reusable_workflows_dir, exist_ok=True)
+    workflows_dir = os.path.join(repo_dir, ".github", "workflows")
+    os.makedirs(workflows_dir, exist_ok=True)
 
     # Copy common templates if they exist
     common_dir = os.path.join(template_dir, "common")
@@ -29,8 +29,7 @@ def main():
             if file.endswith(".yml"):
                 print(f"  - {file}")
                 shutil.copy(
-                    os.path.join(common_dir, file),
-                    os.path.join(reusable_workflows_dir, file),
+                    os.path.join(common_dir, file), os.path.join(workflows_dir, file)
                 )
 
     # Excluded directories for search
@@ -60,7 +59,7 @@ def main():
                 print(f"  - {workflow_name}.yml")
                 shutil.copy(
                     template_file,
-                    os.path.join(reusable_workflows_dir, f"sync-{workflow_name}.yml"),
+                    os.path.join(workflows_dir, f"sync-{workflow_name}.yml"),
                 )
 
 
