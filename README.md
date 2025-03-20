@@ -122,3 +122,10 @@ uv sync --all-groups
 
 See official [`uv tool` docs](https://docs.astral.sh/uv/concepts/tools/) for
 more details.
+
+## To do
+
+- [ ] Supply versions matrix to each `sync-<lang>.yml`.
+- [ ] Ability to ignore syncing over specific `sync-<lang>.yml` workflow
+      template.
+- [ ] Generate `dependabot.yml` for all found languages.
