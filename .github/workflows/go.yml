@@ -29,6 +29,7 @@ jobs:
       matrix: ${{ steps.find-dirs.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+      - run: echo ${{ inputs.go-versions }}
       - id: find-dirs
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
@@ -46,8 +47,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - name: cache go tools
         uses: actions/cache@v4
         id: tools-cache
@@ -65,16 +66,16 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
@@ -93,16 +94,16 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
@@ -119,16 +120,16 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       # NOTE: does not use govulncheck from the go.mod
       - id: govulncheck
         uses: golang/govulncheck-action@v1
@@ -142,8 +143,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -163,16 +164,16 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
@@ -186,16 +187,16 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - run: go test ./...
 
   vet:
@@ -204,15 +205,15 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
+        # go-version: ${{ fromJson(inputs.go-versions) }}
+        # os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
+        # with:
+        #   go-version: ${{ matrix.go-version }}
       - run: go vet ./...
 
