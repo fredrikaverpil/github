@@ -1,4 +1,4 @@
-name: Test Find Dirs Action
+name: test find-dirs
 
 on:
   push:
@@ -15,12 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           
-      - name: Run unit tests
-        run: |
+      - run: |
           cd .github/actions/find-dirs
           python -m unittest test_find_dirs.py
