@@ -3,10 +3,43 @@ name: python
 
 on:
   workflow_call:
+    inputs:
+      python-versions:
+        required: false
+        type: string
+        default: '["3.13"]' # comma-separated list of go-versions
+      os-versions:
+        required: false
+        type: string
+        default: '["ubuntu-latest"]' # comma-separated list of os-versions
 
 jobs:
   find-dirs:
-    uses: fredrikaverpil/github/.github/workflows/find-dirs.yml@main
-    with:
-      file_patterns: uv.lock
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-dirs.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find-dirs
+        uses: fredrikaverpil/github/.github/actions/find-dirs@main
+        with:
+          file_patterns: uv.lock
+
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - run: uv sync --group lint
+      - run: uv run ruff check --diff src tests
+      - run: uv run ruff format --diff src tests
 
