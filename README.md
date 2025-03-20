@@ -71,7 +71,7 @@ go mod tidy
 > requiring `gopls` as a `go tool`.
 
 <details>
-<summary>More on Go tool usage</summary>
+<summary>More on Go tool usage.</summary>
 
 ```sh
 # Initialize a go.tool.mod modfile
