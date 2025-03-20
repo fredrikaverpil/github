@@ -52,7 +52,6 @@ For each `go.mod` location:
 
 ```sh
 go mod init example.com
-go get -tool golang.org/x/tools/gopls@latest
 go get -tool github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go get -tool golang.org/x/vuln/cmd/govulncheck@latest
 go get -tool github.com/securego/gosec/v2/cmd/gosec@latest
@@ -62,6 +61,11 @@ go get -tool mvdan.cc/gofumpt@latest
 go get -tool github.com/segmentio/golines@latest
 go mod tidy
 ```
+
+> [!NOTE]
+>
+> Experimental use of `golang.org/x/tools/gopls@latest` is done in CI without
+> requiring `gopls` as a `go tool`.
 
 <details>
 <summary>More on `go tool` usage</summary>
