@@ -54,7 +54,8 @@ jobs:
           path: ~/go/bin
           key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
       - name: Install Go tools
-        if: steps.tools-cache.outputs.cache-hit != 'true'
+        # NOTE: when using 'stable', the cache is always hit, so we might not want this:
+        # if: steps.tools-cache.outputs.cache-hit != 'true'
         run: |
           go install -modfile=tools/go.mod tool
 
