@@ -1,0 +1,12 @@
+
+name: python
+
+on:
+  workflow_call:
+
+jobs:
+  find-dirs:
+    uses: fredrikaverpil/github/.github/workflows/find-dirs.yml@main
+    with:
+      file_patterns: uv.lock
+
