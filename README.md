@@ -1,14 +1,16 @@
 # github
 
-Central GitHub Actions repo, hosting reusable workflows, composite actions and
-template workflows for GitHub projects by
+Central GitHub Actions repo, hosting
+[reusable workflows](https://docs.github.com/en/actions/sharing-automations/reusing-workflows),
+[composite actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
+and template workflows for GitHub projects by
 [@fredrikaverpil](https://github.com/fredrikaverpil).
 
 ## Quick Start: setting up a new GitHub project
 
 ### Add sync workflow
 
-1. Copy `templates/common/sync.yml` to your repository's
+1. Copy this repo's `sync.yml` to your GitHub project repo's
    `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Merge the PR it creates.
@@ -38,9 +40,9 @@ automatically.
 
 ## Repository Structure
 
-- `.github/workflows` - Reusable workflows that can be called from other
+- `reusable-workflows` - Reusable workflows that can be called from other
   repositories.
-- `.github/actions` - Composite actions that can be used in workflows.
+- `composite-actions` - Composite actions that can be used in workflows.
 - `templates` - Workflow templates organized by project type to be synced to
   other repositories.
 

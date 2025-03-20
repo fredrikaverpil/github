@@ -9,4 +9,4 @@ on:
 
 jobs:
   ci:
-    uses: fredrikaverpil/github/.github/workflows/python.yml@main
+    uses: fredrikaverpil/github/reusable-workflows/python.yml@main

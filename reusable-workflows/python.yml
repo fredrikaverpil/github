@@ -6,7 +6,9 @@ on:
 
 jobs:
   find-dirs:
-    uses: fredrikaverpil/github/.github/workflows/find-dirs.yml@main
+    uses: fredrikaverpil/github/reusable-workflows/find-dirs.yml@main
     with:
       file_patterns: uv.lock
+
+  # TODO: add more..
 

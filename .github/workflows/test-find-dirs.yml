@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - '.github/actions/find-dirs/**'
+      - 'composite-actions/find-dirs/**'
   pull_request:
     paths:
-      - '.github/actions/find-dirs/**'
+      - 'composite-actions/find-dirs/**'
   workflow_dispatch:
 
 jobs:
@@ -22,5 +22,5 @@ jobs:
           python-version: '3.x'
           
       - run: |
-          cd .github/actions/find-dirs
+          cd composite-actions/find-dirs
           python -m unittest test_find_dirs.py

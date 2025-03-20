@@ -48,7 +48,7 @@ runs:
       if: steps.check-config.outputs.config == 'central'
       shell: bash
       run: |
-        curl -fsSL -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/.github/actions/golangci-lint/.golangci.yml
+        curl -fsSL -o ./.golangci.yml https://raw.githubusercontent.com/fredrikaverpil/github/main/composite-actions/golangci-lint/.golangci.yml
 
     - name: show .golangci.yml
       shell: bash
