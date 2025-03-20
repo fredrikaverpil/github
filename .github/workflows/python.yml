@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ${{ fromJson(inputs.go-versions) }}
+        python-version: ${{ fromJson(inputs.python-versions) }}
         os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     steps:
