@@ -6,11 +6,11 @@ on:
       go-versions:
         required: false
         type: string
-        default: "stable" # comma-separated list of go-versions
+        default: '["stable"]' # comma-separated list of go-versions
       os-versions:
         required: false
         type: string
-        default: "ubuntu-latest" # comma-separated list of os-versions
+        default: '["ubuntu-latest"]' # comma-separated list of os-versions
       golangci-config-source:
         description: 'Source for golangci-lint config (local, golden-latest, golden-revision, central)'
         required: false
@@ -36,7 +36,12 @@ jobs:
           exclude_patterns: /tools
 
   setup-tools:
-    runs-on: ubuntu-latest
+    fail-fast: false
+    matrix:
+      dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
+      go-version: ${{ fromJson(inputs.go-versions) }}
+      os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -48,7 +53,7 @@ jobs:
         with:
           path: ~/go/bin
           key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
-      - name: Install Go tools
+      - name: install Go tools
         if: steps.tools-cache.outputs.cache-hit != 'true'
         run: |
           go install -modfile=tools/go.mod tool
@@ -59,8 +64,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -87,8 +92,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -113,8 +118,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -136,8 +141,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -157,8 +162,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -180,8 +185,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
@@ -198,8 +203,8 @@ jobs:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ split(inputs.go-versions, ',') }}
-        os-version: ${{ split(inputs.os-versions, ',') }}
+        go-version: ${{ fromJson(inputs.go-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     env:
       GOTOOLCHAIN: local
