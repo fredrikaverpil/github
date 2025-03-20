@@ -6,11 +6,11 @@ on:
       go-versions:
         required: false
         type: string
-        default: '["stable"]' # comma-separated list of go-versions
+        default: '["stable"]' # comma-separated list of versions
       os-versions:
         required: false
         type: string
-        default: '["ubuntu-latest"]' # comma-separated list of os-versions
+        default: '["ubuntu-latest"]' # comma-separated list of versions
       golangci-config-source:
         description: 'Source for golangci-lint config (local, golden-latest, golden-revision, central)'
         required: false

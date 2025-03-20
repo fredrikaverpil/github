@@ -7,11 +7,11 @@ on:
       python-versions:
         required: false
         type: string
-        default: '["3.13"]' # comma-separated list of go-versions
+        default: '["3.13"]' # comma-separated list of versions
       os-versions:
         required: false
         type: string
-        default: '["ubuntu-latest"]' # comma-separated list of os-versions
+        default: '["ubuntu-latest"]' # comma-separated list of versions
 
 jobs:
   find-dirs:
