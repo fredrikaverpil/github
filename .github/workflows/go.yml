@@ -29,6 +29,24 @@ jobs:
     with:
       file_patterns: go.mod
 
+  setup-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: cache go tools
+        uses: actions/cache@v4
+        id: tools-cache
+        with:
+          path: ~/go/bin
+          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+      - name: Install Go tools
+        if: steps.tools-cache.outputs.cache-hit != 'true'
+        run: |
+          go install -modfile=tools/go.mod tool
+
   format:
     runs-on: ubuntu-latest
     needs: find-dirs
@@ -43,12 +61,16 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
-      - run: go tool goimports -w .
-      - run: go tool gci write --skip-generated --skip-vendor -s standard -s default .
-      - run: go tool gofumpt
+      - uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+      - run: goimports -w .
+      - run: gci write --skip-generated --skip-vendor -s standard -s default .
+      - run: gofumpt
       # FIXME: FATAL Error formatting source: exec: "gofumpt": executable file not found in $PATH
-      # - run: go tool golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
-      - run: go tool golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
+      # - run: golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
+      - run: golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
       - run: git diff --exit-code
 
   golangci-lint:
@@ -65,6 +87,10 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
+      - uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -85,6 +111,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
+      # NOTE: does not use govulncheck from the go.mod
       - id: govulncheck
         uses: golang/govulncheck-action@v1
         with:
@@ -124,7 +151,11 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
-      - run: go tool gosec ./...
+      - uses: actions/cache@v4
+        with:
+          path: ~/go/bin
+          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+      - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
   test:

@@ -58,14 +58,14 @@ runs:
 
     - name: show supported linters
       shell: bash
-      run: go tool golangci-lint help linters
+      run: golangci-lint help linters
 
     - name: run golanci-lint
       shell: bash
-      run: go tool golangci-lint --config=./.golangci.yml run
+      run: golangci-lint --config=./.golangci.yml run
       working-directory: ${{ inputs.working-directory }}
 
-    # - name: run golangci-lint
-    #   uses: golangci/golangci-lint-action@v6
-    #   with:
-    #     working-directory: ${{ inputs.working-directory }}
+  # - name: run golangci-lint
+  #   uses: golangci/golangci-lint-action@v6
+  #   with:
+  #     working-directory: ${{ inputs.working-directory }}
