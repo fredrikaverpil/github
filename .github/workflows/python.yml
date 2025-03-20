@@ -64,7 +64,7 @@ jobs:
       - run: uv sync --group types
       - run: uv run mypy src
 
-  pytest:
+  test:
     needs: [find-dirs]
     strategy:
       fail-fast: false
@@ -72,6 +72,7 @@ jobs:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         python-version: ${{ fromJson(inputs.python-versions) }}
         os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
