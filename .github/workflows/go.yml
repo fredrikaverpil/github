@@ -58,9 +58,8 @@ jobs:
       - name: Install Go tools
         # NOTE: when using 'stable', the cache is always hit, so we might not want this:
         # if: steps.tools-cache.outputs.cache-hit != 'true'
-        run: |
-          go install -modfile=${{ github.workspace }}/tools/go.mod tool
-        # working-directory: ${{ github.workspace }}
+        run: go install tool
+        working-directory: ${{ github.workspace }}/tools
 
   format:
     needs: [find-dirs, setup-tools]
