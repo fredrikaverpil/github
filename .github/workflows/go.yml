@@ -105,7 +105,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.dir }}/go.mod
-      - run: go tool gopls ./...
+      # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts
+      - run: go install golang.org/x/tools/gopls@latest
+      - run: gopls ./...
         working-directory: ${{ matrix.dir }}
 
   gosec:
