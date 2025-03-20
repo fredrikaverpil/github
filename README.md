@@ -9,7 +9,7 @@ and template workflows for my personal projects.
 
 ### Add sync workflow
 
-1. Copy `templates/common/sync.yml` to your repository's
+1. Copy `templates/common/sync.yml` to the new repository's
    `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Merge the PR it creates.
