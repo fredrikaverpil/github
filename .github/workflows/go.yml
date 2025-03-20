@@ -60,6 +60,7 @@ jobs:
         # if: steps.tools-cache.outputs.cache-hit != 'true'
         run: |
           go install -modfile=tools/go.mod tool
+        working-directory: ${{ github.workspace }}
 
   format:
     needs: [find-dirs, setup-tools]
