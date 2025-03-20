@@ -114,9 +114,9 @@ For each `uv.lock` file, add tools to the `pyproject.toml`'s
 
 ```sh
 uv init
-uv add ruff --group linting
-uv add mypy --group typing
-uv add pytest --group testing
+uv add ruff --group lint
+uv add mypy --group types
+uv add coverage pytest --group test
 uv sync --all-groups
 ```
 
