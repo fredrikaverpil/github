@@ -3,15 +3,34 @@ name: release
 on:
   workflow_call:
 
-permissions:
-  contents: write
-  pull-requests: write
 jobs:
   please:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Check for config and manifest files
+        id: check-files
+        run: |
+          CONFIG_FILE=".github/.release-please-config.json"
+          MANIFEST_FILE=".github/.release-please-manifest.json"
+
+          if [ -f "$CONFIG_FILE" ]; then
+            echo "config=$CONFIG_FILE" >> $GITHUB_OUTPUT
+          else
+            echo "config=" >> $GITHUB_OUTPUT
+          fi
+
+          if [ -f "$MANIFEST_FILE" ]; then
+            echo "manifest=$MANIFEST_FILE" >> $GITHUB_OUTPUT
+          else
+            echo "manifest=" >> $GITHUB_OUTPUT
+          fi
+
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.SYNC_TOKEN }}
           release-type: simple
+          config-file: ${{ steps.check-files.outputs.config }}
+          manifest-file: ${{ steps.check-files.outputs.manifest }}
