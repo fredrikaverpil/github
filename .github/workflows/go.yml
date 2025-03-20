@@ -204,8 +204,7 @@ jobs:
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
-    runs-on: ${{ matrix.os-version }}
+    runs-on: ubuntu-latest # no need for matrix
     env:
       GOTOOLCHAIN: local
     steps:
