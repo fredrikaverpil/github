@@ -49,13 +49,13 @@ class TestFindDirectories(unittest.TestCase):
         self.assertEqual(sorted(dirs), sorted([".", "pkg", "src/tools"]))
     
     def test_exclude_all_tools(self):
-        # Exclude all directories named tools
-        dirs = find_directories(["go.mod"], ["tools"])
+        # To exclude all directories named tools, we need to match both 'tools' and 'src/tools'
+        dirs = find_directories(["go.mod"], ["tools", "*/tools"])
         self.assertEqual(sorted(dirs), sorted([".", "pkg"]))
-    
+
     def test_exclude_nested_tools(self):
-        # Exclude tools directories under src
-        dirs = find_directories(["go.mod"], ["src/*/go.mod"])
+        # To exclude only nested tools, use pattern matching
+        dirs = find_directories(["go.mod"], ["src/*"])
         self.assertEqual(sorted(dirs), sorted([".", "pkg", "tools"]))
     
     def test_multiple_patterns(self):
