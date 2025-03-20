@@ -52,7 +52,7 @@ jobs:
         id: tools-cache
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
       - name: Install Go tools
         if: steps.tools-cache.outputs.cache-hit != 'true'
         run: |
