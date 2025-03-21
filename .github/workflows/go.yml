@@ -63,6 +63,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - name: cache go tools
         uses: actions/cache@v4
         id: tools-cache
@@ -96,6 +97,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - uses: actions/cache@v4
         with:
           path: |
@@ -130,6 +132,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - uses: actions/cache@v4
         with:
           path: |
@@ -159,6 +162,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - uses: actions/cache@v4
         with:
           path: |
@@ -185,6 +189,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - name: Get date for weekly cache
         id: date
         run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
@@ -226,6 +231,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - uses: actions/cache@v4
         with:
           path: |
@@ -252,6 +258,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - run: go test ./...
         working-directory: ${{ matrix.dir }}
 
@@ -270,5 +277,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          cache: false
       - run: go vet ./...
         working-directory: ${{ matrix.dir }}
