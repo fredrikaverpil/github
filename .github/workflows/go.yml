@@ -205,7 +205,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   gosec:
-    needs: [find-dirs, get-date] # , go-tool-cache]
+    needs: [find-dirs] # , get-date, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
