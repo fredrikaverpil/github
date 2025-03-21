@@ -165,7 +165,8 @@ jobs:
             ~/go/bin/gopls
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: gopls-${{ runner.os }}-go${{ matrix.go-version }}
+          # 1-week cache
+          key: gopls-${{ runner.os }}-go${{ matrix.go-version }}-${{ github.run_number }}-${{ formatTime(github.event.repository.pushed_at, 'YY-WW') }}
           restore-keys: |
             gopls-${{ runner.os }}-go${{ matrix.go-version }}-
             gopls-${{ runner.os }}-
