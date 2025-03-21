@@ -126,7 +126,6 @@ more details.
 
 ## To do
 
-- [ ] Project repo config file or dot-folder (into which we move `tools`)?
-- [ ] Generate `dependabot.yml` for all found languages.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
+- [ ] Generate `Taskfile.yml` for projects.
