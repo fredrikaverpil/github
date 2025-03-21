@@ -41,6 +41,13 @@ def main():
                     os.path.join(common_dir, file), os.path.join(workflows_dir, file)
                 )
 
+    # Explicitly sync the dependabot workflow if it doesn't exist
+    dependabot_template = os.path.join(template_dir, "sync-dependabot.yml")
+    if os.path.isfile(dependabot_template):
+        dst_file = os.path.join(workflows_dir, "sync-dependabot.yml")
+        if copy_if_not_exists(dependabot_template, dst_file):
+            print("  - Added sync-dependabot.yml")
+
     # Excluded directories for search
     exclude_dirs = {".git", "vendor", "central", "node_modules"}
 
