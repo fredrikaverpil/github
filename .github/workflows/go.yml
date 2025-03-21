@@ -82,6 +82,7 @@ jobs:
     runs-on: ubuntu-latest # no need for matrix
     env:
       GOTOOLCHAIN: local
+      PATH: ${{ github.workspace }}/bin:${{ env.HOME }}/go/bin:${{ env.PATH }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
