@@ -1,5 +1,4 @@
 name: golangci-lint
-
 description: run golangci-lint using local config or golden config
 
 inputs:

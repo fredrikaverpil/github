@@ -45,16 +45,13 @@ jobs:
         with:
           matrix: ${{ needs.find-dirs.outputs.matrix }}
 
-      - name: run sync-workflows action
-        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
-
       - name: create pull request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.SYNC_TOKEN }}
-          commit-message: "ci(workflows): sync with fredrikaverpil/github"
-          title: "ci(workflows): sync with fredrikaverpil/github"
+          commit-message: "ci(dependabot): sync with fredrikaverpil/github"
+          title: "ci(dependabot): sync with fredrikaverpil/github"
           body: |
-            This PR syncs the GitHub repo with CI workflows from the [fredrikaverpil/github](https://github.com/fredrikaverpil/github) repository.
-          branch: ci/sync-workflows
+            This PR syncs the GitHub repo with a generated `dependabot.yml` from the [fredrikaverpil/github](https://github.com/fredrikaverpil/github) repository.
+          branch: ci/sync-dependabot
           delete-branch: true

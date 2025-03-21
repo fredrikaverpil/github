@@ -1,5 +1,4 @@
 name: sync-workflows
-
 description: syncs workflows onto project repository
 
 runs:
