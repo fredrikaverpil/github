@@ -21,7 +21,7 @@ on:
         required: false
         type: string
         default: ''
-      skip-golangci-lint:
+      skip-golangci:
         description: 'Skip running golangci-lint job'
         required: false
         type: boolean
@@ -101,7 +101,7 @@ jobs:
 
   golangci-lint:
     needs: [find-dirs, setup-tools]
-    if: ${{ !inputs.skip-golangci-lint }}
+    if: ${{ !inputs.skip-golangci }}
     strategy:
       fail-fast: false
       matrix:
