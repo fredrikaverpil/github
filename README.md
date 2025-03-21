@@ -30,9 +30,12 @@ automatically.
   - "Workflows: Read and write" (for syncing of workflows)
 - Set the repository access to include the desired repositories.
 
-1. Add the token, to the GitHub project, as a repository secret:
+1. Add the token, to the GitHub project, as a repository secret to both Actions
+   and Dependabot:
 
    - Go to your repository → Settings → Secrets and variables → Actions.
+   - Create a new secret named `SYNC_TOKEN` with your token value.
+   - Go to your repository → Settings → Secrets and variables → Dependabot.
    - Create a new secret named `SYNC_TOKEN` with your token value.
 
 </details>
