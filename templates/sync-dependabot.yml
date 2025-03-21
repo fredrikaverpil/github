@@ -8,4 +8,7 @@ on:
 jobs:
   title:
     uses: fredrikaverpil/github/.github/workflows/gen-dependabot.yml@main
+    # with:
+    #   file_patterns: ""
+    #   exclude_patterns: ""
     secrets: inherit

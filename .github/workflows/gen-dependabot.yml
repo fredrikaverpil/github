@@ -2,6 +2,20 @@ name: gen-dependabot
 
 on:
   workflow_call:
+    inputs:
+      file_patterns:
+        description: 'File patterns to include for dependabot detection (comma-separated)'
+        required: false
+        type: string
+        default: 'go.mod,pyproject.toml,uv.lock,requirements.txt,package.json'
+      exclude_patterns:
+        description: 'File patterns to exclude from dependabot detection (comma-separated)'
+        required: false
+        type: string
+        default: ''
+    secrets:
+      SYNC_TOKEN:
+        required: true
 
 jobs:
   find-dirs:
@@ -16,7 +30,8 @@ jobs:
         id: find-dirs
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
-          file_patterns: "go.mod,pyproject.toml,uv.lock,requirements.txt,package.json"
+          file_patterns: ${{ inputs.file_patterns }}
+          exclude_patterns: ${{ inputs.exclude_patterns }}
 
   sync:
     runs-on: ubuntu-latest
@@ -37,9 +52,9 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.SYNC_TOKEN }}
-          commit-message: "ci(dependabot): sync with fredrikaverpil/github"
-          title: "ci(dependabot): sync with fredrikaverpil/github"
+          commit-message: "ci(workflows): sync with fredrikaverpil/github"
+          title: "ci(workflows): sync with fredrikaverpil/github"
           body: |
-            This PR syncs the GitHub repo with a generated `dependabot.yml` file from the [fredrikaverpil/github](https://github.com/fredrikaverpil/github) repository.
-          branch: ci/sync-dependabot
+            This PR syncs the GitHub repo with CI workflows from the [fredrikaverpil/github](https://github.com/fredrikaverpil/github) repository.
+          branch: ci/sync-workflows
           delete-branch: true
