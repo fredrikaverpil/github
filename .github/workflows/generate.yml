@@ -1,0 +1,34 @@
+name: generate
+
+on:
+  workflow_call:
+
+jobs:
+  find-dirs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-dirs.outputs.matrix }}
+    steps:
+      - name: Find project directories
+        id: find-dirs
+        uses: fredrikaverpil/github/.github/actions/find-dirs@main
+        with:
+          file_patterns: "go.mod,pyproject.toml,uv.lock,requirements.txt,package.json"
+
+  dependabot:
+    runs-on: ubuntu-latest
+    needs: find-dirs
+    steps:
+      - name: Generate dependabot.yml
+        uses: fredrikaverpil/github/.github/actions/generate-dependabot@main
+        with:
+          matrix: ${{ needs.find-dirs.outputs.matrix }}
+
+  # taskfile:
+  #   runs-on: ubuntu-latest
+  #   needs: find-dirs
+  #   steps:
+  #     - name: Generate Taskfile.yml
+  #       uses: fredrikaverpil/github/.github/actions/generate-taskfile@main
+  #       with:
+  #         matrix: ${{ needs.find-dirs.outputs.matrix }}

@@ -1,0 +1,21 @@
+name: Generate Dependabot Configuration
+description: Generates a dependabot.yml file based on detected project types with proper ecosystem detection
+
+inputs:
+  matrix:
+    description: JSON matrix output from find-dirs action
+    required: true
+  output-path:
+    description: Output file path for dependabot.yml
+    required: false
+    default: '.github/dependabot.yml'
+
+runs:
+  using: composite
+  steps:
+    - name: Generate dependabot.yml
+      shell: bash
+      run: |
+        python ${{ github.action_path }}/generate_dependabot.py \
+          --matrix '${{ inputs.matrix }}' \
+          --output '${{ inputs.output-path }}'
