@@ -40,7 +40,7 @@ jobs:
           file_patterns: go.mod
           exclude_patterns: /tools
 
-  setup-tools:
+  go-tool-cache:
     strategy:
       fail-fast: false
       matrix:
@@ -73,7 +73,7 @@ jobs:
         working-directory: ${{ github.workspace }}/tools
 
   format:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -100,7 +100,7 @@ jobs:
       - run: git diff --exit-code
 
   golangci-lint:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     if: ${{ !inputs.skip-golangci }}
     strategy:
       fail-fast: false
@@ -126,7 +126,7 @@ jobs:
           gist-revision: ${{ inputs.golangci-gist-revision }}
 
   govulncheck:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -150,7 +150,7 @@ jobs:
 
   # TODO: apply quickfixes using gopls (maybe as separate job): gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
   gopls:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -190,7 +190,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   gosec:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -213,7 +213,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   test:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -232,7 +232,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   vet:
-    needs: [find-dirs, setup-tools]
+    needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
