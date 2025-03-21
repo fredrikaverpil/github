@@ -205,7 +205,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   gosec:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, get-date] # , go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -227,7 +227,7 @@ jobs:
           #     path: ~/go/bin
           #     key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: go tool -modfile=${{ matrix.dir }}/go.mod install github.com/securego/gosec/v2/cmd/gosec@latest
-        working-directory: ${{ matrix.dir }}
+        # working-directory: ${{ matrix.dir }}
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
