@@ -40,7 +40,16 @@ jobs:
           file_patterns: go.mod
           exclude_patterns: /tools
 
+  get-date:
+    runs-on: ubuntu-latest
+    outputs:
+      week: ${{ steps.date.outputs.week }}
+    steps:
+      - id: date
+        run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
+
   go-tool-cache:
+    needs: [get-date]
     strategy:
       fail-fast: false
       matrix:
@@ -62,7 +71,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
             go-tools-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tools-${{ runner.os }}-
@@ -73,7 +82,7 @@ jobs:
         working-directory: ${{ github.workspace }}/tools
 
   format:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, get-date, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -82,7 +91,6 @@ jobs:
     runs-on: ubuntu-latest # no need for matrix
     env:
       GOTOOLCHAIN: local
-      PATH: ${{ github.workspace }}/bin:${{ env.HOME }}/go/bin:${{ env.PATH }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -91,17 +99,23 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: goimports -w .
+        working-directory: ${{ matrix.dir }}
       - run: gci write --skip-generated --skip-vendor -s standard -s default .
+        working-directory: ${{ matrix.dir }}
       - run: gofumpt
+        working-directory: ${{ matrix.dir }}
       # FIXME: FATAL Error formatting source: exec: "gofumpt": executable file not found in $PATH
       # - run: golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
+      # working-directory: ${{ matrix.dir }}
       - run: golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
+        working-directory: ${{ matrix.dir }}
       - run: git diff --exit-code
+        working-directory: ${{ matrix.dir }}
 
   golangci-lint:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, get-date, go-tool-cache]
     if: ${{ !inputs.skip-golangci }}
     strategy:
       fail-fast: false
@@ -119,7 +133,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -127,7 +141,7 @@ jobs:
           gist-revision: ${{ inputs.golangci-gist-revision }}
 
   govulncheck:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs]
     strategy:
       fail-fast: false
       matrix:
@@ -151,7 +165,7 @@ jobs:
 
   # TODO: apply quickfixes using gopls (maybe as separate job): gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
   gopls:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, get-date, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -191,7 +205,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   gosec:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, get-date, go-tool-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -209,11 +223,11 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('tools/go.mod') }}
+          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
-  test:
+  go-test:
     needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
@@ -232,7 +246,7 @@ jobs:
       - run: go test ./...
         working-directory: ${{ matrix.dir }}
 
-  vet:
+  go-vet:
     needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
