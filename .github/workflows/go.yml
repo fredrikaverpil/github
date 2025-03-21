@@ -71,10 +71,10 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
-            go-tools-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tools-${{ runner.os }}-
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - name: Install Go tools
         # NOTE: when using 'stable', the cache is always hit, so we might not want this:
         # if: steps.tools-cache.outputs.cache-hit != 'true'
@@ -99,7 +99,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: goimports -w .
         working-directory: ${{ matrix.dir }}
       - run: gci write --skip-generated --skip-vendor -s standard -s default .
@@ -133,7 +133,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -223,7 +223,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/go/bin
-          key: go-tools-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
