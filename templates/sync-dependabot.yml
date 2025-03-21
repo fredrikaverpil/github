@@ -9,6 +9,6 @@ jobs:
   title:
     uses: fredrikaverpil/github/.github/workflows/gen-dependabot.yml@main
     # with:
-    #   file_patterns: ""
-    #   exclude_patterns: ""
+    #   file_patterns: "go.mod,uv.lock"
+    #   exclude_patterns: "**/tests/**,path/to/specific/directory/**"
     secrets: inherit
