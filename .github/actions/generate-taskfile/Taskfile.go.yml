@@ -1,0 +1,60 @@
+version: '3'
+
+vars:
+  TOOLS_MODFILE: tools/go.mod
+  EXCLUDE_DIRS: ./... | grep -v /jobs/
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list-all
+
+  lint:
+    desc: Run golangci-lint
+    cmds:
+      - go tool -modfile={{.TOOLS_MODFILE}} golangci-lint run --exclude-dirs jobs
+
+  format:
+    desc: Format Go code
+    cmds:
+      - go tool -modfile={{.TOOLS_MODFILE}} goimports -w $(find . -type f -name "*.go" -not -path "./jobs/*")
+      - go tool -modfile={{.TOOLS_MODFILE}} gci write --skip-generated --skip-vendor -s standard -s default $(find . -type f -name "*.go" -not -path "./jobs/*")
+      - go tool -modfile={{.TOOLS_MODFILE}} gofumpt -w $(find . -type f -name "*.go" -not -path "./jobs/*")
+      - go tool -modfile={{.TOOLS_MODFILE}} golines --ignore-generated --tab-len=1 --max-len=120 --write-output $(find . -type f -name "*.go" -not -path "./jobs/*")
+
+  vuln:
+    desc: Check for vulnerabilities
+    cmds:
+      - go tool -modfile={{.TOOLS_MODFILE}} govulncheck $(go list ./... | grep -v /jobs/)
+
+  sec:
+    desc: Run security checks
+    cmds:
+      - go tool -modfile={{.TOOLS_MODFILE}} gosec -exclude-dir=jobs ./...
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet $(go list ./... | grep -v /jobs/)
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test $(go list ./... | grep -v /jobs/)
+
+  diff:
+    desc: Check for git diff
+    cmds:
+      - git diff --exit-code
+
+  check:
+    desc: Run all checks
+    cmds:
+      - task: format
+      - task: lint
+      - task: vuln
+      - task: sec
+      - task: vet
+      - task: test
+      - task: diff
