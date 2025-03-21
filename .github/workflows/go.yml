@@ -157,6 +157,18 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+      - name: cache gopls
+        uses: actions/cache@v4
+        id: gopls-cache
+        with:
+          path: |
+            ~/go/bin/gopls
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: gopls-${{ runner.os }}-go${{ matrix.go-version }}
+          restore-keys: |
+            gopls-${{ runner.os }}-go${{ matrix.go-version }}-
+            gopls-${{ runner.os }}-
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts
       - run: go install golang.org/x/tools/gopls@latest
       - run: gopls stats
