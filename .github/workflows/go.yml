@@ -76,8 +76,6 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Go tools
-        # NOTE: when using 'stable', the cache is always hit, so we might not want this:
-        # if: steps.tools-cache.outputs.cache-hit != 'true'
         run: go install tool
         working-directory: ${{ github.workspace }}/tools
       - name: review ~/go/bin
@@ -100,7 +98,10 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - uses: actions/cache@v4
         with:
-          path: ~/go/bin
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - run: goimports -w .
         working-directory: ${{ matrix.dir }}
@@ -108,9 +109,6 @@ jobs:
         working-directory: ${{ matrix.dir }}
       - run: gofumpt
         working-directory: ${{ matrix.dir }}
-      # FIXME: FATAL Error formatting source: exec: "gofumpt": executable file not found in $PATH
-      # - run: golines --base-formatter=gofumpt --ignore-generated --tab-len=1 --max-len=120 --write-output .
-      # working-directory: ${{ matrix.dir }}
       - run: golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
         working-directory: ${{ matrix.dir }}
       - run: git diff --exit-code
@@ -134,7 +132,10 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - uses: actions/cache@v4
         with:
-          path: ~/go/bin
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
@@ -231,13 +232,6 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-      - run: ls -alh
-      - run: mkdir -p ~/go/bin
-      - run: ls -alh ~/go/bin
-        # - run: go tool install github.com/securego/gosec/v2/cmd/gosec
-        # working-directory: ${{ github.workspace }}/tools
-        # working-directory: ${{ matrix.dir }}
-      - run: ls -alh ~/go/bin
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
