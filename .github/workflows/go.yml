@@ -179,6 +179,8 @@ jobs:
         working-directory: ${{ matrix.dir }}
       - run: find . -name "*.go" | xargs -P $(nproc) gopls check
         working-directory: ${{ matrix.dir }}
+      - run: git diff --exit-code
+        working-directory: ${{ matrix.dir }}
 
   gosec:
     needs: [find-dirs, setup-tools]
