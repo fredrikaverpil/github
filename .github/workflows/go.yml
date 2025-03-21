@@ -232,6 +232,7 @@ jobs:
       - run: go tool install github.com/securego/gosec/v2/cmd/gosec@latest
         working-directory: ${{ github.workspace }}/tools
         # working-directory: ${{ matrix.dir }}
+      - run: ls -alh ~/go/bin
       - run: gosec ./...
         working-directory: ${{ matrix.dir }}
 
