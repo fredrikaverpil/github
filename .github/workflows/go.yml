@@ -178,7 +178,16 @@ jobs:
       - run: gopls stats
         working-directory: ${{ matrix.dir }}
       # FIXME: this should likely run several times to fix all issues
-      - run: find . -name "*.go" | xargs gopls codeaction -w -exec -kind=quickfix
+      - name: Apply gopls quickfixes
+        run: |
+          set +e
+          output=$(find . -name "*.go" | xargs gopls codeaction -w -exec -kind=quickfix 2>&1)
+          exit_code=$?
+          set -e
+          if [[ $exit_code -ne 0 && ! "$output" =~ "no matching code action" ]]; then
+            echo "$output"
+            exit $exit_code
+          fi
         working-directory: ${{ matrix.dir }}
       - run: find . -name "*.go" | xargs -P $(nproc) gopls check
         working-directory: ${{ matrix.dir }}
