@@ -226,6 +226,9 @@ jobs:
           #   with:
           #     path: ~/go/bin
           #     key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+      - run: ls -alh
+      - run: mkdir -p ~/go/bin
+      - run: ls -alh ~/go/bin
       - run: go tool -modfile=${{ matrix.dir }}/go.mod install github.com/securego/gosec/v2/cmd/gosec@latest
         # working-directory: ${{ matrix.dir }}
       - run: gosec ./...
