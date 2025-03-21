@@ -161,6 +161,8 @@ jobs:
       - run: go install golang.org/x/tools/gopls@latest
       - run: gopls stats
         working-directory: ${{ matrix.dir }}
+      - run: find . -name "*.go" | xargs -P $(nproc) gopls check
+        working-directory: ${{ matrix.dir }}
 
   gosec:
     needs: [find-dirs, setup-tools]
