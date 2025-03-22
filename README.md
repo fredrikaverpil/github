@@ -168,6 +168,7 @@ more details.
 
 ## To do
 
+- [ ] Add all jobs to python workflow.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
