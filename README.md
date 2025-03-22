@@ -155,8 +155,6 @@ more details.
 
 ## To do
 
-- [ ] Add all uv jobs to python workflow.
-- [ ] Add lua workflow.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
