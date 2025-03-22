@@ -2,17 +2,16 @@ import os
 import json
 import sys
 import argparse
-from pathlib import Path
 
 
-def detect_package_ecosystem(directory):
+def detect_package_ecosystem(directory: str) -> str | None:
     """
     Detect the correct package ecosystem for a directory.
     Returns a tuple of (ecosystem_name, priority)
     Higher priority will override lower priority if multiple ecosystems found.
     """
     # Check for specific files with priority
-    file_ecosystem_map = {
+    file_ecosystem_map: dict[str, tuple[str, int]] = {
         # Python ecosystem detection
         "uv.lock": ("uv", 100),  # Highest priority for Python
         "poetry.lock": ("pip", 90),
@@ -32,7 +31,7 @@ def detect_package_ecosystem(directory):
         # Other ecosystems can be added here
     }
 
-    found_ecosystems = []
+    found_ecosystems: list[tuple[str, int]] = []
 
     # Check for each file type
     for filename, (ecosystem, priority) in file_ecosystem_map.items():
@@ -46,14 +45,14 @@ def detect_package_ecosystem(directory):
     return sorted(found_ecosystems, key=lambda x: x[1], reverse=True)[0][0]
 
 
-def generate_dependabot_config(directory_matrix):
+def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
     """
     Generate dependabot.yml configuration based on detected project types
     """
-    directories = directory_matrix.get("dir", [])
+    directories: list[str] = directory_matrix.get("dir", [])
 
     # Map directories to ecosystems
-    ecosystem_dirs = {}
+    ecosystem_dirs: dict[str, list[str]] = {}
 
     for directory in directories:
         ecosystem = detect_package_ecosystem(directory)
@@ -105,40 +104,42 @@ updates:
     return config
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(
         description="Generate dependabot.yml configuration"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--matrix",
         required=True,
         help="JSON matrix of directories from find-dirs action",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--output",
         default=".github/dependabot.yml",
         help="Output file path (default: .github/dependabot.yml)",
     )
-
-    args = parser.parse_args()
+    args: argparse.Namespace = parser.parse_args()
 
     try:
-        matrix = json.loads(args.matrix)
+        # Explicitly annotate args.matrix as str before passing to json.loads
+        matrix_input: str = args.matrix
+        matrix_data: dict[str, list[str]] = json.loads(matrix_input)
     except json.JSONDecodeError:
         print("Error: Invalid JSON matrix input", file=sys.stderr)
         return 1
 
     # Generate dependabot configuration
-    config_content = generate_dependabot_config(matrix)
+    config_content = generate_dependabot_config(matrix_data)
 
     # Create output directory if it doesn't exist
-    os.makedirs(os.path.dirname(args.output), exist_ok=True)
+    output_path: str = args.output
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     # Write configuration to file
-    with open(args.output, "w") as f:
-        f.write(config_content)
+    with open(output_path, "w") as f:
+        _ = f.write(config_content)
 
-    print(f"Dependabot configuration generated at {args.output}")
+    print(f"Dependabot configuration generated at {output_path}")
     return 0
 
 
