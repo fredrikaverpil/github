@@ -110,7 +110,7 @@ def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directories: ["/", ".github/**/*.yml", ".github/**/*.yaml"]
+    directories: ["/", ".github/actions/*/*.yml", ".github/actions/*/*.yaml"]
     schedule:
       interval: "weekly"
       day: "monday"
