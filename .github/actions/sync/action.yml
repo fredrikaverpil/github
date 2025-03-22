@@ -1,0 +1,26 @@
+name: sync
+description: syncs workflows and files onto project repository
+
+runs:
+  using: "composite"
+  steps:
+    - name: set environment variable
+      shell: bash
+      run: |
+        echo "TMP_REPO_PATH=.tmp_repo" >> $GITHUB_ENV
+
+    - name: checkout fredrikaverpil/github into temporary directory
+      uses: actions/checkout@v4
+      with:
+        repository: fredrikaverpil/github
+        path: ${{ env.TMP_REPO_PATH }}
+        ref: main
+
+    - name: perform sync operation
+      shell: bash
+      run: |
+        python ${{ env.TMP_REPO_PATH }}/.github/actions/sync/sync.py . ${{ env.TMP_REPO_PATH }}/templates
+
+    - name: cleanup
+      shell: bash
+      run: rm -rf ${{ env.TMP_REPO_PATH }}
