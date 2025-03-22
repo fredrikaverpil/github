@@ -13,7 +13,7 @@ def detect_package_ecosystem(directory: str) -> str | None:
     # Check for specific files with priority
     file_ecosystem_map: dict[str, tuple[str, int]] = {
         # Python ecosystem detection
-        "uv.lock": ("pip", 100),  # Highest priority for Python
+        "uv.lock": ("uv", 100),  # Highest priority for Python
         "poetry.lock": ("pip", 90),
         "pyproject.toml": ("pip", 80),
         "requirements.txt": ("pip", 70),
