@@ -9,7 +9,7 @@ and template workflows for my personal projects.
 
 ### Bootstrap
 
-1. Copy `templates/managed/sync.yml` to the new repository's
+1. Copy `templates/managed/workflows/sync.yml` to the new repository's
    `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Review the PR it creates and customize any unmanaged workflows.
@@ -48,27 +48,47 @@ and template workflows for my personal projects.
 
 ```text
 .github/
-  actions/                    # Composite actions
-  workflows/                  # Reusable workflows
+  actions/           # Composite actions
+  workflows/         # Reusable workflows
 templates/
-  managed/                    # Workflow templates that are always updated by bootstrap/sync
-    sync.yml                  # The bootstrap/sync workflow itself
-    *.yml                     # Auto-updated workflows
-  unmanaged/                  # Workflow templates that are copied once by bootstrap and can be customized
-    core/
-      *.yml                   # Core workflows copied once
-    project/
-      <lang>/
-        ci.yml                # Project-specific workflow
+  managed/           # Workflows that are always updated by bootstrap/sync
+  unmanaged/         # Workflows that are only copied if they do not already exist
+```
+
+For both `managed` and `unmanaged` folders:
+
+```text
+common/
+  files/
+    root/
+      *.*            # Files and folders to be stored relative to root
+  workflows/
+    *.yml
+
+project/
+  <project-type>/    # Project folder (e.g. "go", "python" etc)
+    files/
+      project/       # Files and folders to be stored relative to project
+        *.*
+      root/
+        *.*          # Files and folders to be stored relative to root
+    workflows/
+      *.yml
 ```
 
 ### Target repos
+
+Workflows are synced over to the target project like so:
 
 ```text
 - `.github/workflows/sync.yml`
 - `.github/workflows/managed-*.yml`
 - `.github/workflows/unmanaged-*.yml`
 ```
+
+Files are synced over with their filenames intact. Managed files will always be
+updated while unmanaged files will only be copied to the target repo if they do
+not already exist.
 
 ## Tools setup
 
