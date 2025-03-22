@@ -15,10 +15,12 @@ import shutil
 MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
 # This file is automatically updated during sync operations
 # Source: https://github.com/fredrikaverpil/github
+
 """
 
 UNMANAGED_HEADER = """# SAFE TO CUSTOMIZE - This file is copied once and not overwritten during sync
 # Source: https://github.com/fredrikaverpil/github
+
 """
 
 # Excluded directories for project search
