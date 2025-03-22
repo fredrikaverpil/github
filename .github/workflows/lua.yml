@@ -2,6 +2,11 @@ name: lua
 
 on:
   workflow_call:
+    inputs:
+      os-versions:
+        required: false
+        type: string
+        default: '["ubuntu-latest"]' # comma-separated list of versions
 
 jobs:
   find-dirs:
