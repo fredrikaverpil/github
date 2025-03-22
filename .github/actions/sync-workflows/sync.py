@@ -24,14 +24,26 @@ UNMANAGED_HEADER = """# SAFE TO CUSTOMIZE - This file is copied once and not ove
 
 
 def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
-    """Copy a file with a specific header prepended."""
+    """Copy a file with a specific header prepended or replaced."""
     with open(src_path, "r") as src_file:
         content = src_file.read()
 
-    # Insert header at the beginning of the file
-    with open(dst_path, "w") as dst_file:
-        _ = dst_file.write(header)
-        _ = dst_file.write(content)
+    # Check if the file already has a managed header
+    import re
+
+    header_pattern = r"^# MANAGED BY fredrikaverpil/github.*?(?=\n[^#]|\Z)"
+    if re.search(header_pattern, content, re.DOTALL | re.MULTILINE):
+        # Replace existing header with new header
+        content = re.sub(
+            header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
+        )
+        with open(dst_path, "w") as dst_file:
+            _ = dst_file.write(content)
+    else:
+        # Insert header at the beginning of the file
+        with open(dst_path, "w") as dst_file:
+            _ = dst_file.write(header)
+            _ = dst_file.write(content)
 
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
