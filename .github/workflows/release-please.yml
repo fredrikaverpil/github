@@ -23,8 +23,11 @@ jobs:
           fi
           exit 0
       - uses: googleapis/release-please-action@v4
+        # https://github.com/googleapis/release-please-action
+        # https://github.com/googleapis/release-please/blob/main/docs/customizing.md
         id: release
         with:
           config-file: ${{ steps.release-please-config.outputs.config-file }}
           release-type: ${{ steps.release-please-config.outputs.release-type }}
+          # https://github.com/googleapis/release-please-action#package-options
           manifest-file: ${{ steps.release-please-config.outputs.manifest-file }}
