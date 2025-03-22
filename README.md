@@ -37,6 +37,11 @@ and template workflows for my personal projects.
 
 </details>
 
+> [!NOTE]
+>
+> No need to remove any bootsrapping files, as they will serve the purpose of
+> syncing workflows.
+
 ## Layout of this repo
 
 ```text
