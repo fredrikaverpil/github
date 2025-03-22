@@ -10,9 +10,13 @@ following these rules:
 
 import os
 import sys
-from datetime import datetime
 
 MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
+# This file is automatically updated during sync operations
+# Source: https://github.com/fredrikaverpil/github
+"""
+
+MANAGED_HEADER_WITH_DATE = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
 # This file is automatically updated during sync operations
 # Source: https://github.com/fredrikaverpil/github
 # Last synced: {date}
@@ -48,20 +52,19 @@ def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
     """Copy a managed file with appropriate header."""
-    header = MANAGED_HEADER.format(date=datetime.now().strftime("%Y-%m-%d"))
+    # header = MANAGED_HEADER_WITH_DATE.format(date=datetime.now().strftime("%Y-%m-%d"))
+    header = MANAGED_HEADER
     add_header_to_file(src_path, dst_path, header)
     print(f"  - Updated {os.path.basename(dst_path)}")
 
 
-def copy_unmanaged_file(src_path: str, dst_path: str) -> bool:
+def copy_unmanaged_file(src_path: str, dst_path: str) -> None:
     """Copy an unmanaged file if it doesn't exist."""
     if os.path.exists(dst_path):
         print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")
-        return False
 
     add_header_to_file(src_path, dst_path, UNMANAGED_HEADER)
     print(f"  - Added {os.path.basename(dst_path)}")
-    return True
 
 
 def main():
@@ -96,7 +99,7 @@ def main():
                 dst_file = os.path.join(
                     workflows_dir, f"sync-once-{os.path.basename(file)}"
                 )
-                _ = copy_unmanaged_file(src_file, dst_file)
+                copy_unmanaged_file(src_file, dst_file)
 
     # 3. Process project-specific templates
     # Define workflow templates and their associated file indicators
@@ -136,7 +139,7 @@ def main():
                     if file.endswith(".yml"):
                         src_file = os.path.join(project_dir, file)
                         dst_file = os.path.join(workflows_dir, f"sync-once-{file}")
-                        _ = copy_unmanaged_file(src_file, dst_file)
+                        copy_unmanaged_file(src_file, dst_file)
 
 
 if __name__ == "__main__":
