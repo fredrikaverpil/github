@@ -5,35 +5,26 @@ on:
 
 jobs:
   please:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ !failure() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # https://github.com/googleapis/release-please-action#package-options
-      - name: Check for config and manifest files
-        id: check-files
+      - name: release-please config
+        id: release-please-config
         run: |
-          CONFIG_FILE=".github/.release-please-config.json"
-          MANIFEST_FILE=".github/.release-please-manifest.json"
-
-          if [ -f "$CONFIG_FILE" ]; then
-            echo "config=$CONFIG_FILE" >> $GITHUB_OUTPUT
+          if [ -f .github/release-please-config.json ]; then
+            echo "config-file=.github/release-please-config.json" >> $GITHUB_OUTPUT
+            [ -f .github/release-please-manifest.json ] &&
+              echo "manifest-file=.github/release-please-manifest.json" >> $GITHUB_OUTPUT
+            [ -f .github/.release-please-manifest.json ] &&
+              echo "manifest-file=.github/.release-please-manifest.json" >> $GITHUB_OUTPUT
           else
-            echo "config=" >> $GITHUB_OUTPUT
+            echo "release-type=simple" >> $GITHUB_OUTPUT
           fi
-
-          if [ -f "$MANIFEST_FILE" ]; then
-            echo "manifest=$MANIFEST_FILE" >> $GITHUB_OUTPUT
-          else
-            echo "manifest=" >> $GITHUB_OUTPUT
-          fi
-
-      # https://github.com/googleapis/release-please-action
-      # https://github.com/googleapis/release-please/blob/main/docs/customizing.md
+          exit 0
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
-          token: ${{ secrets.SYNC_TOKEN }}
-          release-type: simple
-          config-file: ${{ steps.check-files.outputs.config }}
-          manifest-file: ${{ steps.check-files.outputs.manifest }}
+          config-file: ${{ steps.release-please-config.outputs.config-file }}
+          release-type: ${{ steps.release-please-config.outputs.release-type }}
+          manifest-file: ${{ steps.release-please-config.outputs.manifest-file }}
