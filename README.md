@@ -90,6 +90,13 @@ Files are synced over with their filenames intact. Managed files will always be
 updated while unmanaged files will only be copied to the target repo if they do
 not already exist.
 
+## Assumptions
+
+- CI is set up for local-first development. Everything that runs in CI must be
+  invoked in a way so that it can also be reproduced locally.
+- Concise scripts are used in CI, to keep down complexity and be easy to
+  change/maintain.
+
 ## Tools setup
 
 The reusable workflows and composite actions expects tooling in the GitHub
@@ -178,4 +185,4 @@ more details.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
-- [ ] Make bootstrap setup up tooling.
+- [ ] Make bootstrap setup up tooling?
