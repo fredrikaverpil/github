@@ -1,0 +1,14 @@
+name: lua
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    uses: fredrikaverpil/github/.github/workflows/lua.yml@main
+    with:
+      os-versions: '["ubuntu-latest"]'

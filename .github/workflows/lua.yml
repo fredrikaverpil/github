@@ -1,0 +1,34 @@
+name: lua
+
+on:
+  workflow_call:
+
+jobs:
+  find-dirs:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.find-dirs.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find-dirs
+        uses: fredrikaverpil/github/.github/actions/find-dirs@main
+        with:
+          file_patterns: go.mod
+          exclude_patterns: /tools
+
+  format:
+    needs: [find-dirs]
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check formatting
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check ${{ matrix.dir }}

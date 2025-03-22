@@ -111,6 +111,7 @@ def main():
     workflow_mapping = {
         "go": ["go.mod"],
         "python": ["pyproject.toml", "uv.lock", "requirements.txt"],
+        "lua": ["lua/", "stylua.toml"],
     }
 
     # Excluded directories for search
@@ -129,6 +130,15 @@ def main():
 
             # Check if any indicator file exists in this directory
             if any(indicator in files for indicator in indicators):
+                found = True
+                break
+
+            # Check for directory indicators (removing trailing slashes)
+            if any(
+                indicator.rstrip("/") in dirs
+                for indicator in indicators
+                if indicator.endswith("/")
+            ):
                 found = True
                 break
 
