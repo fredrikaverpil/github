@@ -55,8 +55,8 @@ generated-*.yml
 
 ### Bootstrap
 
-1. Copy `bootstrap/bootstrap.yml` to the new repository's
-   `.github/workflows/bootstrap.yml`.
+1. Copy `templates/managed/sync.yml` to the new repository's
+   `.github/workflows/sync.yml`.
 1. Run the workflow manually from the Actions tab.
 1. Review the PR it creates and customize any unmanaged workflows.
 
