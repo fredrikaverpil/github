@@ -159,5 +159,3 @@ more details.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
 - [ ] Make bootstrap setup up tooling.
-- [ ] Add `sync.yml` to this repo. Make sure dependabot.yml finds all workflow
-      directories.
