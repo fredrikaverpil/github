@@ -13,24 +13,66 @@ def detect_package_ecosystem(directory: str) -> str | None:
     # Check for specific files with priority
     file_ecosystem_map: dict[str, tuple[str, int]] = {
         # Python ecosystem detection
-        "uv.lock": ("uv", 100),  # Highest priority for Python
+        "uv.lock": ("pip", 100),  # Highest priority for Python
         "poetry.lock": ("pip", 90),
         "pyproject.toml": ("pip", 80),
         "requirements.txt": ("pip", 70),
         "setup.py": ("pip", 60),
+        "Pipfile.lock": ("pip", 50),
+        "Pipfile": ("pip", 40),
         # Go ecosystem detection
         "go.mod": ("gomod", 100),
+        "go.sum": ("gomod", 90),
         # Node ecosystem detection
         "package-lock.json": ("npm", 100),
         "yarn.lock": ("npm", 90),
+        "pnpm-lock.yaml": ("npm", 85),
         "package.json": ("npm", 80),
+        "bun.lockb": ("bun", 100),
         # Docker ecosystem detection
         "Dockerfile": ("docker", 80),
-        "docker-compose.yml": ("docker", 70),
-        "docker-compose.yaml": ("docker", 70),
-        # Other ecosystems can be added here
+        "docker-compose.yml": ("docker-compose", 100),
+        "docker-compose.yaml": ("docker-compose", 100),
+        # Ruby ecosystem detection
+        "Gemfile": ("bundler", 90),
+        "Gemfile.lock": ("bundler", 100),
+        # PHP ecosystem detection
+        "composer.json": ("composer", 90),
+        "composer.lock": ("composer", 100),
+        # Rust ecosystem detection
+        "Cargo.toml": ("cargo", 90),
+        "Cargo.lock": ("cargo", 100),
+        # .NET ecosystem detection
+        "packages.config": ("nuget", 100),
+        "paket.lock": ("nuget", 90),
+        "global.json": ("dotnet-sdk", 100),
+        "Directory.Packages.props": ("nuget", 95),
+        # Elixir ecosystem detection
+        "mix.exs": ("mix", 90),
+        "mix.lock": ("mix", 100),
+        # Elm ecosystem detection
+        "elm.json": ("elm", 90),
+        "elm-package.json": ("elm", 100),
+        # Gradle ecosystem detection
+        "build.gradle": ("gradle", 90),
+        "build.gradle.kts": ("gradle", 90),
+        "gradle-wrapper.properties": ("gradle", 100),
+        # Maven ecosystem detection
+        "pom.xml": ("maven", 100),
+        # Dart/Flutter ecosystem detection
+        "pubspec.yaml": ("pub", 90),
+        "pubspec.lock": ("pub", 100),
+        # Swift ecosystem detection
+        "Package.swift": ("swift", 100),
+        # Terraform ecosystem detection
+        "main.tf": ("terraform", 90),
+        ".terraform.lock.hcl": ("terraform", 100),
+        # Dev containers detection
+        "devcontainer.json": ("devcontainers", 100),
+        ".devcontainer.json": ("devcontainers", 90),
+        # Git submodule detection
+        ".gitmodules": ("gitsubmodule", 100),
     }
-
     found_ecosystems: list[tuple[str, int]] = []
 
     # Check for each file type
@@ -68,7 +110,7 @@ def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directories: ["/", ".github/**/*.yml", ".github/**/*.yaml"]
     schedule:
       interval: "weekly"
       day: "monday"
