@@ -62,6 +62,7 @@ def copy_unmanaged_file(src_path: str, dst_path: str) -> None:
     """Copy an unmanaged file if it doesn't exist."""
     if os.path.exists(dst_path):
         print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")
+        return
 
     add_header_to_file(src_path, dst_path, UNMANAGED_HEADER)
     print(f"  - Added {os.path.basename(dst_path)}")
@@ -86,7 +87,13 @@ def main():
         for file in os.listdir(managed_dir):
             if file.endswith(".yml"):
                 src_file = os.path.join(managed_dir, file)
-                dst_file = os.path.join(workflows_dir, file)
+
+                # Special handling for sync.yml to keep its name
+                if file == "sync.yml":
+                    dst_file = os.path.join(workflows_dir, file)
+                else:
+                    dst_file = os.path.join(workflows_dir, f"managed-{file}")
+
                 copy_managed_file(src_file, dst_file)
 
     # 2. Process unmanaged/core templates (copy once)
@@ -96,9 +103,7 @@ def main():
         for file in os.listdir(core_dir):
             if file.endswith(".yml"):
                 src_file = os.path.join(core_dir, file)
-                dst_file = os.path.join(
-                    workflows_dir, f"sync-once-{os.path.basename(file)}"
-                )
+                dst_file = os.path.join(workflows_dir, f"unmanaged-{file}")
                 copy_unmanaged_file(src_file, dst_file)
 
     # 3. Process project-specific templates
@@ -138,7 +143,7 @@ def main():
                 for file in os.listdir(project_dir):
                     if file.endswith(".yml"):
                         src_file = os.path.join(project_dir, file)
-                        dst_file = os.path.join(workflows_dir, f"sync-once-{file}")
+                        dst_file = os.path.join(workflows_dir, f"unmanaged-{file}")
                         copy_unmanaged_file(src_file, dst_file)
 
 

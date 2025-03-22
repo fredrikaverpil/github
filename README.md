@@ -42,7 +42,9 @@ and template workflows for my personal projects.
 > No need to remove any bootsrapping files, as they will serve the purpose of
 > syncing workflows.
 
-## Layout of this repo
+## Files and folders layout
+
+### This repo
 
 ```text
 .github/
@@ -51,13 +53,21 @@ and template workflows for my personal projects.
 templates/
   managed/                    # Workflow templates that are always updated by bootstrap/sync
     sync.yml                  # The bootstrap/sync workflow itself
-    sync-auto-*.yml           # Auto-updated workflows
+    *.yml                     # Auto-updated workflows
   unmanaged/                  # Workflow templates that are copied once by bootstrap and can be customized
     core/
-      sync-once-*.yml         # Core workflows copied once
+      *.yml                   # Core workflows copied once
     project/
       <lang>/
-        sync-once-<lang>.yml  # Project-specific workflows
+        ci.yml                # Project-specific workflow
+```
+
+### Target repos
+
+```text
+- `.github/workflows/sync.yml`
+- `.github/workflows/managed-*.yml`
+- `.github/workflows/unmanaged-*.yml`
 ```
 
 ## Tools setup
