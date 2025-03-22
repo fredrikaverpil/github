@@ -85,11 +85,9 @@ project/
 
 Workflows are synced over to the target project like so:
 
-```text
 - `.github/workflows/sync.yml`
 - `.github/workflows/managed-*.yml`
 - `.github/workflows/unmanaged-*.yml`
-```
 
 Files are synced over with their filenames intact. Managed files will always be
 updated while unmanaged files will only be copied to the target repo if they do
