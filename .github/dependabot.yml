@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # Configuration for GitHub Actions across multiple directories
   - package-ecosystem: "github-actions"
     directories:
       - /
@@ -8,8 +7,19 @@ updates:
       - templates/**.yml
     schedule:
       interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 10
+    groups:
+      actions:
+        patterns: ["*"]
     labels:
       - "dependencies"
 
+  - package-ecosystem: "gomod"
+    directories:
+      - tools
+    schedule:
+      interval: "monthly"
+    groups:
+      go:
+        patterns: ["*"]
+    labels:
+      - "dependencies"
