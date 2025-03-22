@@ -1,14 +1,54 @@
+"""
+Workflow sync script for fredrikaverpil/github
+
+This script syncs workflow files from a central repository to a project repository
+following these rules:
+- Managed workflows are always updated
+- Unmanaged workflows are only copied if they don't exist
+- Appropriate headers are added to each file
+"""
+
 import os
 import sys
-import shutil
+from datetime import datetime
+
+MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
+# This file is automatically updated during sync operations
+# Source: https://github.com/fredrikaverpil/github
+# Last synced: {date}
+"""
+
+UNMANAGED_HEADER = """# SAFE TO CUSTOMIZE - This file is copied once and not overwritten during sync
+# Source: https://github.com/fredrikaverpil/github
+"""
 
 
-def copy_if_not_exists(src, dst):
-    """Copy file only if it doesn't already exist in destination."""
-    if os.path.exists(dst):
-        print(f"  - Skipping {os.path.basename(dst)} (already exists)")
+def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
+    """Copy a file with a specific header prepended."""
+    with open(src_path, "r") as src_file:
+        content = src_file.read()
+
+    # Insert header at the beginning of the file
+    with open(dst_path, "w") as dst_file:
+        _ = dst_file.write(header)
+        _ = dst_file.write(content)
+
+
+def copy_managed_file(src_path: str, dst_path: str) -> None:
+    """Copy a managed file with appropriate header."""
+    header = MANAGED_HEADER.format(date=datetime.now().strftime("%Y-%m-%d"))
+    add_header_to_file(src_path, dst_path, header)
+    print(f"  - Updated {os.path.basename(dst_path)}")
+
+
+def copy_unmanaged_file(src_path: str, dst_path: str) -> bool:
+    """Copy an unmanaged file if it doesn't exist."""
+    if os.path.exists(dst_path):
+        print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")
         return False
-    shutil.copy(src, dst)
+
+    add_header_to_file(src_path, dst_path, UNMANAGED_HEADER)
+    print(f"  - Added {os.path.basename(dst_path)}")
     return True
 
 
@@ -20,39 +60,44 @@ def main():
     repo_dir = sys.argv[1] if len(sys.argv) > 1 else "."
     template_dir = sys.argv[2] if len(sys.argv) > 2 else f"{tmp_repo_path}/templates"
 
+    # Ensure workflows directory exists
+    workflows_dir = os.path.join(repo_dir, ".github", "workflows")
+    os.makedirs(workflows_dir, exist_ok=True)
+
+    # 1. Process managed templates (always update)
+    managed_dir = os.path.join(template_dir, "managed")
+    print("Processing managed workflow templates...")
+    if os.path.isdir(managed_dir):
+        for file in os.listdir(managed_dir):
+            if file.endswith(".yml"):
+                src_file = os.path.join(managed_dir, file)
+                dst_file = os.path.join(workflows_dir, file)
+                copy_managed_file(src_file, dst_file)
+
+    # 2. Process unmanaged/core templates (copy once)
+    core_dir = os.path.join(template_dir, "unmanaged", "core")
+    print("Processing core workflow templates...")
+    if os.path.isdir(core_dir):
+        for file in os.listdir(core_dir):
+            if file.endswith(".yml"):
+                src_file = os.path.join(core_dir, file)
+                dst_file = os.path.join(
+                    workflows_dir, f"sync-once-{os.path.basename(file)}"
+                )
+                _ = copy_unmanaged_file(src_file, dst_file)
+
+    # 3. Process project-specific templates
     # Define workflow templates and their associated file indicators
     workflow_mapping = {
         "go": ["go.mod"],
         "python": ["pyproject.toml", "uv.lock", "requirements.txt"],
     }
 
-    # Ensure workflows directory exists
-    workflows_dir = os.path.join(repo_dir, ".github", "workflows")
-    os.makedirs(workflows_dir, exist_ok=True)
-
-    # Copy common templates if they exist
-    common_dir = os.path.join(template_dir, "common")
-    print("Copying common workflow templates...")
-    if os.path.isdir(common_dir):
-        for file in os.listdir(common_dir):
-            if file.endswith(".yml"):
-                print(f"  - {file}")
-                shutil.copy(
-                    os.path.join(common_dir, file), os.path.join(workflows_dir, file)
-                )
-
-    # Explicitly sync the dependabot workflow if it doesn't exist
-    dependabot_template = os.path.join(template_dir, "sync-dependabot.yml")
-    if os.path.isfile(dependabot_template):
-        dst_file = os.path.join(workflows_dir, "sync-dependabot.yml")
-        if copy_if_not_exists(dependabot_template, dst_file):
-            print("  - Added sync-dependabot.yml")
-
     # Excluded directories for search
-    exclude_dirs = {".git", "vendor", "central", "node_modules"}
+    exclude_dirs = {".git", "vendor", "node_modules"}
 
-    # Process each workflow template
-    for workflow_name, indicators in workflow_mapping.items():
+    # Process each project-specific template
+    for project_type, indicators in workflow_mapping.items():
         # Check if any indicator file exists
         found = False
 
@@ -69,12 +114,17 @@ def main():
 
         # If found, copy the corresponding workflow template
         if found:
-            print(f"Found {workflow_name} project, copying workflow template...")
-            template_file = os.path.join(template_dir, f"sync-{workflow_name}.yml")
-            if os.path.isfile(template_file):
-                dst_file = os.path.join(workflows_dir, f"sync-{workflow_name}.yml")
-                if copy_if_not_exists(template_file, dst_file):
-                    print(f"  - {workflow_name}.yml")
+            print(f"Found {project_type} project, copying workflow template...")
+            project_dir = os.path.join(
+                template_dir, "unmanaged", "project", project_type
+            )
+
+            if os.path.isdir(project_dir):
+                for file in os.listdir(project_dir):
+                    if file.endswith(".yml"):
+                        src_file = os.path.join(project_dir, file)
+                        dst_file = os.path.join(workflows_dir, f"sync-once-{file}")
+                        _ = copy_unmanaged_file(src_file, dst_file)
 
 
 if __name__ == "__main__":

@@ -5,17 +5,60 @@ Central GitHub Actions repo, hosting
 [composite actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
 and template workflows for my personal projects.
 
+## Layout
+
+### Folders
+
+```text
+.github/
+  actions/                # Composite actions
+  workflows/              # Reusable workflows
+templates/
+  managed/                # Workflow templates that are always updated by bootstrap/sync
+    sync.yml              # The bootstrap/sync workflow itself
+    sync-auto-*.yml       # Auto-updated workflows
+  unmanaged/              # Workflow templates that are copied once by bootstrap and can be customized
+    core/
+      sync-once-*.yml     # Core workflows copied once
+    project/
+      go/
+        sync-once-go.yml  # Project-specific workflows
+      python/
+        sync-once-python.yml
+```
+
+### File naming
+
+```text
+# Workflows from central repository
+sync-*.yml               # Always synced/updated
+sync-once-*.yml          # Copied once, safe to customize
+
+# Generated files through central workflows
+generated-*.yml
+
+# Repository-specific custom workflows
+*.yml                    # No prefix for custom workflows
+```
+
+### In destination repositories
+
+```
+.github/workflows/
+  sync.yml               # Identical name to template
+  sync-auto-*.yml        # Same names as in central repo
+  sync-once-*.yml        # Same names as in central repo
+  custom-workflow.yml    # Custom workflows with different naming pattern
+```
+
 ## Quick Start: setting up a new GitHub project
 
-### Add sync workflow
+### Bootstrap
 
-1. Copy `templates/common/sync.yml` to the new repository's
-   `.github/workflows/sync.yml`.
+1. Copy `bootstrap/bootstrap.yml` to the new repository's
+   `.github/workflows/bootstrap.yml`.
 1. Run the workflow manually from the Actions tab.
-1. Merge the PR it creates.
-
-The sync workflow performs detection and syncs over relevant workflows
-automatically.
+1. Review the PR it creates and customize any unmanaged workflows.
 
 <details>
 <summary>A token is required for the sync, expand to see details.</summary>
@@ -40,18 +83,14 @@ automatically.
 
 </details>
 
-## Repository Structure
-
-- `.github/workflows` - Reusable workflows that can be called from other
-  repositories.
-- `.github/actions` - Composite actions that can be used in workflows.
-- `templates` - Workflow templates organized by project type to be synced to
-  other repositories.
-
 ## Tools setup
 
 The reusable workflows and composite actions expects tooling in the GitHub
 projects.
+
+> [!NOTE]
+>
+> This will be handled by the bootstrap in the future.
 
 ### Go
 
@@ -132,3 +171,4 @@ more details.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
+- [ ] Make bootstrap setup up tooling.
