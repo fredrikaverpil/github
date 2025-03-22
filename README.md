@@ -5,52 +5,6 @@ Central GitHub Actions repo, hosting
 [composite actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
 and template workflows for my personal projects.
 
-## Layout
-
-### Folders
-
-```text
-.github/
-  actions/                # Composite actions
-  workflows/              # Reusable workflows
-templates/
-  managed/                # Workflow templates that are always updated by bootstrap/sync
-    sync.yml              # The bootstrap/sync workflow itself
-    sync-auto-*.yml       # Auto-updated workflows
-  unmanaged/              # Workflow templates that are copied once by bootstrap and can be customized
-    core/
-      sync-once-*.yml     # Core workflows copied once
-    project/
-      go/
-        sync-once-go.yml  # Project-specific workflows
-      python/
-        sync-once-python.yml
-```
-
-### File naming
-
-```text
-# Workflows from central repository
-sync-*.yml               # Always synced/updated
-sync-once-*.yml          # Copied once, safe to customize
-
-# Generated files through central workflows
-generated-*.yml
-
-# Repository-specific custom workflows
-*.yml                    # No prefix for custom workflows
-```
-
-### In destination repositories
-
-```
-.github/workflows/
-  sync.yml               # Identical name to template
-  sync-auto-*.yml        # Same names as in central repo
-  sync-once-*.yml        # Same names as in central repo
-  custom-workflow.yml    # Custom workflows with different naming pattern
-```
-
 ## Quick Start: setting up a new GitHub project
 
 ### Bootstrap
@@ -82,6 +36,24 @@ generated-*.yml
    - Create a new secret named `SYNC_TOKEN` with your token value.
 
 </details>
+
+## Layout of this repo
+
+```text
+.github/
+  actions/                    # Composite actions
+  workflows/                  # Reusable workflows
+templates/
+  managed/                    # Workflow templates that are always updated by bootstrap/sync
+    sync.yml                  # The bootstrap/sync workflow itself
+    sync-auto-*.yml           # Auto-updated workflows
+  unmanaged/                  # Workflow templates that are copied once by bootstrap and can be customized
+    core/
+      sync-once-*.yml         # Core workflows copied once
+    project/
+      <lang>/
+        sync-once-<lang>.yml  # Project-specific workflows
+```
 
 ## Tools setup
 
