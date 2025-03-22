@@ -97,8 +97,8 @@ not already exist.
 
 - CI is set up for local-first development. Everything that runs in CI must be
   invoked in a way so that it can also be reproduced locally.
-- Concise scripts are used in CI, to keep down complexity and be easy to
-  change/maintain.
+- The user is expected to open their editor in the git repo root. This is where
+  commandline tasks are carried out (e.g. `Taskfile.yml` commands).
 
 ## Tools setup
 
