@@ -5,6 +5,11 @@ Central GitHub Actions repo, hosting
 [composite actions](https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action)
 and template workflows for my personal projects.
 
+- [creosote](https://github.com/fredrikaverpil/creosote)
+- [multipr](https://github.com/fredrikaverpil/multipr)
+- [neotest-golang](https://github.com/fredrikaverpil/neotest-golang)
+- [pr.nvim](https://github.com/fredrikaverpil/pr.nvim)
+
 ## Quick Start: setting up a new GitHub project
 
 ### Bootstrap
