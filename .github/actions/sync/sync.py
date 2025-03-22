@@ -63,7 +63,7 @@ def copy_with_header(src_path: str, dst_path: str, header: str) -> None:
             content = re.sub(
                 header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
             )
-            dst_file.write(content)
+            _ = dst_file.write(content)
         elif has_shebang:
             # Keep shebang at the top, insert header after it
             shebang_line, rest_of_content = content.split("\n", 1)
@@ -224,6 +224,10 @@ def main() -> None:
             f"Processing {'managed' if is_managed else 'unmanaged'} {prefix} workflows..."
         )
         for file in os.listdir(source_dir):
+            # Skip .gitkeep files
+            if file == ".gitkeep":
+                continue
+
             if file.endswith(".yml"):
                 src_file = os.path.join(source_dir, file)
                 dst_file = os.path.join(dest_dir, file)
@@ -293,6 +297,10 @@ def main() -> None:
             f"Processing {'managed' if is_managed else 'unmanaged'} files from {source_dir}..."
         )
         for file in os.listdir(source_dir):
+            # Skip .gitkeep files
+            if file == ".gitkeep":
+                continue
+
             src_file = os.path.join(source_dir, file)
             dst_file = os.path.join(dest_dir, file)
             copy_file(src_file, dst_file, is_managed)

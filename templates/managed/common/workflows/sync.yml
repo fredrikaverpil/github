@@ -16,8 +16,8 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v4
 
-      - name: run sync-workflows action
-        uses: fredrikaverpil/github/.github/actions/sync-workflows@main
+      - name: run sync action
+        uses: fredrikaverpil/github/.github/actions/sync@main
 
       - name: create pull request
         uses: peter-evans/create-pull-request@v7
