@@ -54,7 +54,7 @@ def detect_package_ecosystems(directory: str) -> list[str]:
     }
 
     # Set to track unique ecosystems
-    found_ecosystems = set()
+    found_ecosystems: set[str] = set()
 
     # Check for each file type
     for filename, ecosystem in file_ecosystem_map.items():
@@ -131,11 +131,13 @@ def main() -> int:
         "--matrix",
         required=True,
         help="JSON matrix of directories from find-dirs action",
+        type=str,
     )
     _ = parser.add_argument(
         "--output",
         default=".github/dependabot.yml",
         help="Output file path (default: .github/dependabot.yml)",
+        type=str,
     )
     args: argparse.Namespace = parser.parse_args()
 
