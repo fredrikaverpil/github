@@ -80,6 +80,7 @@ jobs:
         run: go install tool
         working-directory: ${{ github.workspace }}/tools
       - name: Install Task
+        # TODO: should be added into the tools/go.mod
         run: go install github.com/go-task/task/v3/cmd/task@latest
       - name: review ~/go/bin
         run: ls -alh ~/go/bin
