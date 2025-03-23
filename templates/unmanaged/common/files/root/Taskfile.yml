@@ -4,7 +4,7 @@
 version: '3'
 
 vars:
-  LANG_TASKFILES:
+  TASKFILES:
     sh: find . -type f -name "Taskfile.*.yml" -not -path "*/node_modules/*" -not -path "*/.git/*" | sort
 
 tasks:
@@ -18,7 +18,7 @@ tasks:
     cmds:
       - cmd: task -t {{.TASKFILE}} format
         for:
-          var: LANG_TASKFILES
+          var: TASKFILES
           split: "\n"
           as: TASKFILE
 
@@ -27,7 +27,7 @@ tasks:
     cmds:
       - cmd: task -t {{.TASKFILE}} lint
         for:
-          var: LANG_TASKFILES
+          var: TASKFILES
           split: "\n"
           as: TASKFILE
 
@@ -36,7 +36,7 @@ tasks:
     cmds:
       - cmd: task -t {{.TASKFILE}} test
         for:
-          var: LANG_TASKFILES
+          var: TASKFILES
           split: "\n"
           as: TASKFILE
 
@@ -45,6 +45,6 @@ tasks:
     cmds:
       - cmd: task -t {{.TASKFILE}} install
         for:
-          var: LANG_TASKFILES
+          var: TASKFILES
           split: "\n"
           as: TASKFILE
