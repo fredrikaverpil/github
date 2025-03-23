@@ -40,53 +40,14 @@ jobs:
           file_patterns: go.mod
           exclude_patterns: /tools
 
-  get-date:
-    runs-on: ubuntu-latest
-    outputs:
-      week: ${{ steps.date.outputs.week }}
-    steps:
-      - id: date
-        run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
-
-  go-tool-cache:
-    needs: [get-date]
-    strategy:
-      fail-fast: false
-      matrix:
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
-    runs-on: ${{ matrix.os-version }}
-    env:
-      GOTOOLCHAIN: local
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
-          cache: false
-      - name: cache go tools
-        uses: actions/cache@v4
-        id: tools-cache
-        with:
-          path: |
-            ~/go/bin
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
-      - name: Install Go tools
-        run: go install tool
-        working-directory: ${{ github.workspace }}/tools
-      - name: Install Task
-        # TODO: should be added into the tools/go.mod
-        run: go install github.com/go-task/task/v3/cmd/task@latest
-      - name: review ~/go/bin
-        run: ls -alh ~/go/bin
+  tools-cache:
+    uses: ./.github/workflows/tools-cache.yml
+    with:
+      go-versions: ${{ inputs.go-versions }}
+      os-versions: ${{ inputs.os-versions }}
 
   format:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -107,7 +68,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -115,7 +76,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   golangci-lint:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     if: ${{ !inputs.skip-golangci }}
     strategy:
       fail-fast: false
@@ -137,7 +98,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -148,7 +109,7 @@ jobs:
           gist-revision: ${{ inputs.golangci-gist-revision }}
 
   govulncheck:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -170,7 +131,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -179,7 +140,7 @@ jobs:
 
   # TODO: apply quickfixes using gopls (maybe as separate job): gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
   gopls:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -204,7 +165,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -213,7 +174,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   gosec:
-    needs: [find-dirs, get-date, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -235,7 +196,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -243,7 +204,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   go-test:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -265,7 +226,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -273,7 +234,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   go-vet:
-    needs: [find-dirs, go-tool-cache]
+    needs: [find-dirs, tools-cache]
     strategy:
       fail-fast: false
       matrix:
@@ -294,7 +255,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
