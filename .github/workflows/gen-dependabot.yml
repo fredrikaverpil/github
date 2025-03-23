@@ -7,7 +7,7 @@ on:
         description: 'File patterns to include for dependabot detection (comma-separated)'
         required: false
         type: string
-        default: 'go.mod,pyproject.toml,uv.lock,requirements.txt,package.json'
+        default: 'go.mod,pyproject.toml,uv.lock,requirements.txt,package.json,Cargo.toml'
       exclude_patterns:
         description: 'File patterns to exclude from dependabot detection (comma-separated)'
         required: false
