@@ -7,7 +7,7 @@ on:
         description: 'File patterns to include for dependabot detection (comma-separated)'
         required: false
         type: string
-        default: 'go.mod,pyproject.toml,uv.lock,requirements.txt,package.json,Cargo.toml'
+        default: 'uv.lock,go.mod,package.json,Dockerfile,docker-compose.yml,docker-compose.yaml,Gemfile,composer.json,Cargo.toml,packages.config,global.json,Directory.Packages.props,mix.exs,elm.json,build.gradle,build.gradle.kts,pom.xml,pubspec.yaml,Package.swift,main.tf,devcontainer.json,.devcontainer.json,.gitmodules'
       exclude_patterns:
         description: 'File patterns to exclude from dependabot detection (comma-separated)'
         required: false
