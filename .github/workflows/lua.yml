@@ -18,7 +18,7 @@ jobs:
       - id: find-dirs
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
-          file_patterns: lua/,stylua.lua
+          file_patterns: stylua.toml
           exclude_patterns: /tools
 
   format:
