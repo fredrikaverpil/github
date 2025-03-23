@@ -298,14 +298,26 @@ def main() -> None:
         print(
             f"Processing {'managed' if is_managed else 'unmanaged'} files from {source_dir}..."
         )
-        for file in os.listdir(source_dir):
-            # Skip .gitkeep files
-            if file == ".gitkeep":
-                continue
-
-            src_file = os.path.join(source_dir, file)
-            dst_file = os.path.join(dest_dir, file)
-            copy_file(src_file, dst_file, is_managed)
+        
+        # Process the directory recursively
+        for root, dirs, files in os.walk(source_dir):
+            # Calculate the relative path from source_dir
+            rel_path = os.path.relpath(root, source_dir)
+            if rel_path == ".":
+                rel_path = ""
+                
+            # Build the corresponding destination directory
+            dst_dir_path = os.path.join(dest_dir, rel_path) if rel_path else dest_dir
+            
+            # Process all files in this directory
+            for file in files:
+                # Skip .gitkeep files
+                if file == ".gitkeep":
+                    continue
+                    
+                src_file = os.path.join(root, file)
+                dst_file = os.path.join(dst_dir_path, file)
+                copy_file(src_file, dst_file, is_managed)
 
     print("\nSync completed successfully!")
 
