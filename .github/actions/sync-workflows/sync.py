@@ -9,6 +9,7 @@ following these rules:
 """
 
 import os
+import shutil
 import sys
 
 MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
@@ -16,8 +17,14 @@ MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
 # Source: https://github.com/fredrikaverpil/github
 """
 
+MANAGED_HEADER_WITH_DATE = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
+# This file is automatically updated during sync operations
+# Source: https://github.com/fredrikaverpil/github
+# Last synced: {date}
+"""
 
-def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None:
+
+def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
     """Copy a file with a specific header prepended or replaced."""
     with open(src_path, "r") as src_file:
         content = src_file.read()
@@ -25,27 +32,24 @@ def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None
     # Check if the file already has a managed header
     import re
 
-    if header is not None:
-        header_pattern = r"^# MANAGED BY fredrikaverpil/github.*?(?=\n[^#]|\Z)"
-        if re.search(header_pattern, content, re.DOTALL | re.MULTILINE):
-            # Replace existing header with new header
-            content = re.sub(
-                header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
-            )
-            with open(dst_path, "w") as dst_file:
-                _ = dst_file.write(content)
-        else:
-            # Insert header at the beginning of the file
-            with open(dst_path, "w") as dst_file:
-                _ = dst_file.write(header)
-                _ = dst_file.write(content)
-    else:
+    header_pattern = r"^# MANAGED BY fredrikaverpil/github.*?(?=\n[^#]|\Z)"
+    if re.search(header_pattern, content, re.DOTALL | re.MULTILINE):
+        # Replace existing header with new header
+        content = re.sub(
+            header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
+        )
         with open(dst_path, "w") as dst_file:
+            _ = dst_file.write(content)
+    else:
+        # Insert header at the beginning of the file
+        with open(dst_path, "w") as dst_file:
+            _ = dst_file.write(header)
             _ = dst_file.write(content)
 
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
     """Copy a managed file with appropriate header."""
+    # header = MANAGED_HEADER_WITH_DATE.format(date=datetime.now().strftime("%Y-%m-%d"))
     header = MANAGED_HEADER
     add_header_to_file(src_path, dst_path, header)
     print(f"  - Updated {os.path.basename(dst_path)}")
@@ -57,7 +61,7 @@ def copy_unmanaged_file(src_path: str, dst_path: str) -> None:
         print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")
         return
 
-    add_header_to_file(src_path, dst_path, None)
+    _ = shutil.copyfile(src_path, dst_path)
     print(f"  - Added {os.path.basename(dst_path)}")
 
 
