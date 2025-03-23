@@ -188,16 +188,13 @@ jobs:
       - name: Get date for weekly cache
         id: date
         run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
-      - name: cache gopls
-        uses: actions/cache@v4
-        id: gopls-cache
+      - uses: actions/cache@v4
         with:
           path: |
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          # 1-week cache
-          key: gopls-${{ runner.os }}-go${{ matrix.go-version }}-${{ steps.date.outputs.week }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
             gopls-${{ runner.os }}-go${{ matrix.go-version }}-
             gopls-${{ runner.os }}-
