@@ -7,7 +7,7 @@ on:
       python-versions:
         required: false
         type: string
-        default: '["3.13"]' # comma-separated list of versions
+        default: '["latest"]' # comma-separated list of versions
       os-versions:
         required: false
         type: string
@@ -41,9 +41,35 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
           cache-dependency-glob: "uv.lock"
-      - run: uv sync --group lint
-      - run: uv run ruff check --diff src tests
-      - run: uv run ruff format --diff src tests
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: task -t Taskfile.python.yml lint
+
+  format:
+    needs: [find-dirs]
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
+        python-version: ${{ fromJson(inputs.python-versions) }}
+        os-version: ${{ fromJson(inputs.os-versions) }}
+    runs-on: ${{ matrix.os-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: task -t Taskfile.python.yml format
 
   type:
     needs: [find-dirs]
@@ -61,10 +87,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
           cache-dependency-glob: "uv.lock"
-      - run: uv sync --group types
-      - run: uv run mypy src
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: task -t Taskfile.python.yml mypy
 
-  pytest:
+  test:
     needs: [find-dirs]
     strategy:
       fail-fast: false
@@ -80,14 +110,16 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
           cache-dependency-glob: "uv.lock"
-      - run: uv sync --group test
-      - run: uv run coverage run -m pytest -s -vv
-      - run: uv run coverage report
-      - run: uv run coverage html
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: task -t Taskfile.python.yml pytest
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v4
         with:
-          name: code-coverage-report-${{ matrix.os }}-${{ matrix.python-version }}
+          name: code-coverage-report-${{ matrix.os-version }}-${{ matrix.python-version }}
           path: htmlcov
           retention-days: 5
