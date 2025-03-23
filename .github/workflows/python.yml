@@ -12,6 +12,16 @@ on:
         required: false
         type: string
         default: '["ubuntu-latest"]' # comma-separated list of versions
+      file_patterns:
+        description: 'File patterns to include for python project detection (comma-separated)'
+        required: false
+        type: string
+        default: 'uv.lock'
+      exclude_patterns:
+        description: 'File patterns to exclude for python project detection (comma-separated)'
+        required: false
+        type: string
+        default: ''
 
 jobs:
   find-dirs:
@@ -23,7 +33,8 @@ jobs:
       - id: find-dirs
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
-          file_patterns: uv.lock
+          file_patterns: ${{ inputs.file_patterns }}
+          exclude_patterns: ${{ inputs.exclude_patterns }}
 
   lint:
     needs: [find-dirs]
