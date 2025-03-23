@@ -48,9 +48,6 @@ jobs:
         with:
           path: |
             ~/.cargo/bin
-            ~/go/bin
-            ~/go/pkg/mod
-            ~/.cache/go-build
           key: stylua-${{ runner.os }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
             stylua-${{ runner.os }}-
