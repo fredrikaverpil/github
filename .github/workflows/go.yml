@@ -243,7 +243,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   go-test:
-    needs: [find-dirs, go-tool-cache] # FIXME: needs cache for 'task' to be available
+    needs: [find-dirs, get-date, go-tool-cache] # FIXME: needs cache for 'task' to be available
     strategy:
       fail-fast: false
       matrix:
@@ -259,11 +259,23 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
+      - name: cache go tools
+        uses: actions/cache@v4
+        id: tools-cache
+        with:
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml go-test
         working-directory: ${{ matrix.dir }}
 
   go-vet:
-    needs: [find-dirs, go-tool-cache] # FIXME: needs cache for 'task' to be available
+    needs: [find-dirs, get-date, go-tool-cache] # FIXME: needs cache for 'task' to be available
     strategy:
       fail-fast: false
       matrix:
@@ -278,5 +290,17 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
+      - name: cache go tools
+        uses: actions/cache@v4
+        id: tools-cache
+        with:
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml go-vet
         working-directory: ${{ matrix.dir }}
