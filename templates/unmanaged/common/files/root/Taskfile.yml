@@ -14,7 +14,7 @@ tasks:
       - task -t Taskfile.lua.yml --list
 
   format-all:
-    desc: Run format task from all language taskfiles
+    desc: Run format task from all taskfiles
     cmds:
       - cmd: task -t {{.TASKFILE}} format
         for:
@@ -23,9 +23,27 @@ tasks:
           as: TASKFILE
 
   lint-all:
-    desc: Run lint task from all language taskfiles
+    desc: Run lint task from all taskfiles
     cmds:
       - cmd: task -t {{.TASKFILE}} lint
+        for:
+          var: LANG_TASKFILES
+          split: "\n"
+          as: TASKFILE
+
+  test-all:
+    desc: Run test task from all taskfiles
+    cmds:
+      - cmd: task -t {{.TASKFILE}} test
+        for:
+          var: LANG_TASKFILES
+          split: "\n"
+          as: TASKFILE
+
+  install-all:
+    desc: Run install task from all taskfiles
+    cmds:
+      - cmd: task -t {{.TASKFILE}} install
         for:
           var: LANG_TASKFILES
           split: "\n"

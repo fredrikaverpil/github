@@ -50,6 +50,7 @@ tasks:
 
   go-test:
     desc: Run go test
+    aliases: ["test"]
     cmds:
       - go test ./...
 
@@ -69,6 +70,7 @@ tasks:
 
   install-gopls:
     desc: Install stylua using version from tools/Cargo.toml
+    aliases: ["install"]
     cmds:
       - go install golang.org/x/tools/gopls@latest
 
