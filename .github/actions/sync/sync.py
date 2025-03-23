@@ -80,6 +80,7 @@ def copy_file(
     dst_path: str,
     is_managed: bool,
     workflow_prefix: str | None = None,
+    repo_dir: str = ".",
 ) -> None:
     """
     Copy a file, adding header only for compatible file types.
@@ -89,6 +90,7 @@ def copy_file(
         dst_path: Destination file path
         is_managed: Whether the file is managed (always updated) or not
         workflow_prefix: If provided, add this prefix to the filename for workflows
+        repo_dir: Repository root directory
     """
     # Handle workflow prefix if provided
     if workflow_prefix:
@@ -97,6 +99,21 @@ def copy_file(
         if filename != "sync.yml":
             dir_path = os.path.dirname(dst_path)
             dst_path = os.path.join(dir_path, f"{workflow_prefix}-{filename}")
+
+    # Skip Taskfiles if the destination is within the tools directory
+    filename = os.path.basename(dst_path)
+    tools_dir = os.path.normpath(os.path.join(repo_dir, "tools"))
+    dst_path_norm = os.path.normpath(dst_path)
+    is_taskfile = filename.startswith("Taskfile") and (
+        filename.endswith(".yml") or filename.endswith(".yaml")
+    )
+    is_in_tools = dst_path_norm == tools_dir or dst_path_norm.startswith(
+        tools_dir + os.sep
+    )
+
+    if is_taskfile and is_in_tools:
+        print(f"  - Skipping {filename} (Taskfiles not allowed in tools directory)")
+        return
 
     # If unmanaged and file exists, skip
     if not is_managed and os.path.exists(dst_path):
@@ -233,7 +250,7 @@ def main() -> None:
             if file.endswith(".yml"):
                 src_file = os.path.join(source_dir, file)
                 dst_file = os.path.join(dest_dir, file)
-                copy_file(src_file, dst_file, is_managed, prefix)
+                copy_file(src_file, dst_file, is_managed, prefix, repo_dir)
 
     # Process configuration files
     print("\nSyncing configuration files...")
@@ -298,26 +315,26 @@ def main() -> None:
         print(
             f"Processing {'managed' if is_managed else 'unmanaged'} files from {source_dir}..."
         )
-        
+
         # Process the directory recursively
         for root, dirs, files in os.walk(source_dir):
             # Calculate the relative path from source_dir
             rel_path = os.path.relpath(root, source_dir)
             if rel_path == ".":
                 rel_path = ""
-                
+
             # Build the corresponding destination directory
             dst_dir_path = os.path.join(dest_dir, rel_path) if rel_path else dest_dir
-            
+
             # Process all files in this directory
             for file in files:
                 # Skip .gitkeep files
                 if file == ".gitkeep":
                     continue
-                    
+
                 src_file = os.path.join(root, file)
                 dst_file = os.path.join(dst_dir_path, file)
-                copy_file(src_file, dst_file, is_managed)
+                copy_file(src_file, dst_file, is_managed, repo_dir=repo_dir)
 
     print("\nSync completed successfully!")
 
