@@ -49,10 +49,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
       - name: Install Go tools
         run: go install tool
         working-directory: ${{ github.workspace }}/tools
