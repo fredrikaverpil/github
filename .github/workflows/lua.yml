@@ -21,13 +21,16 @@ jobs:
           file_patterns: stylua.toml
           exclude_patterns: /tools
 
-  tools-cache:
-    uses: ./.github/workflows/tools-cache.yml
-    with:
-      os-versions: ${{ inputs.os-versions }}
+  get-date:
+    runs-on: ubuntu-latest
+    outputs:
+      week: ${{ steps.date.outputs.week }}
+    steps:
+      - id: date
+        run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
 
   format:
-    needs: [find-dirs, tools-cache]
+    needs: [find-dirs, get-date]
     strategy:
       fail-fast: false
       matrix:
@@ -36,13 +39,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - run: pwd
+        working-directory: ${{ matrix.dir }}
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: false
       - uses: actions/cache@v4
         with:
           path: |
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
+          key: task-${{ runner.os }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-
+      - name: Install task
+        # FIXME: figure out better way to supply task as part of tools
+        run: go install github.com/go-task/task/v3/cmd/task@latest
+        working-directory: ${{ matrix.dir }}
       - name: Check formatting with stylua
         run: task -t Taskfile.lua.yml format
         working-directory: ${{ matrix.dir }}
