@@ -24,11 +24,13 @@ tasks:
 
   golangci-lint:
     desc: Lint with golangci-lint
+    aliaes: ["lint"]
     cmds:
-      - task -t Taskfile.go.yml golangci-lint
+      - '{{ .GO_TOOL_CMD }} golangci-lint run -v ./...'
 
   format:
     desc: Format with goimports, gci, gofumpt and golines
+    aliases: ["lint"]
     cmds:
       - '{{ .GO_TOOL_CMD }} goimports -w .'
       - '{{ .GO_TOOL_CMD }} gci write --skip-generated --skip-vendor -s standard -s default .'
