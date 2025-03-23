@@ -55,7 +55,7 @@ jobs:
             ~/.cache/go-build
           key: task-${{ runner.os }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
-            go-tool-${{ runner.os }}-
+            task-${{ runner.os }}-
       - name: Install task
         # FIXME: figure out better way to supply task as part of tools
         run: go install github.com/go-task/task/v3/cmd/task@latest
