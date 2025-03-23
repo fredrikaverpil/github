@@ -37,7 +37,7 @@ tasks:
     desc: Install stylua using version from tools/Cargo.toml
     cmds:
       - |
-        VERSION=$(sed -n 's/^stylua = "\([^"]*\)"$/\1/p' tools/Cargo.toml)
+        VERSION=$(sed -n 's/^stylua = "\([^"]*\)"$/\1/p' "$TOOLS_DIR/Cargo.toml")
         cargo install stylua --version $VERSION
 
   ensure-stylua:
