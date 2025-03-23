@@ -39,6 +39,9 @@ def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None
             with open(dst_path, "w") as dst_file:
                 _ = dst_file.write(header)
                 _ = dst_file.write(content)
+    else:
+        with open(dst_path, "w") as dst_file:
+            _ = dst_file.write(content)
 
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
