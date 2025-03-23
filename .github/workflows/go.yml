@@ -193,8 +193,7 @@ jobs:
         id: gopls-cache
         with:
           path: |
-            ~/go/bin/task
-            ~/go/bin/gopls
+            ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
           # 1-week cache
