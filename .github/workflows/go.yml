@@ -68,10 +68,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - run: task -t Taskfile.go.yml format
         working-directory: ${{ matrix.dir }}
 
@@ -98,10 +95,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -131,10 +125,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - run: task -t Taskfile.go.yml govulncheck
         working-directory: ${{ matrix.dir }}
 
@@ -165,10 +156,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts. Therefore we install it here.
       - run: task -t Taskfile.go.yml gopls
         working-directory: ${{ matrix.dir }}
@@ -196,10 +184,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - run: task -t Taskfile.go.yml gosec
         working-directory: ${{ matrix.dir }}
 
@@ -226,10 +211,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - run: task -t Taskfile.go.yml go-test
         working-directory: ${{ matrix.dir }}
 
@@ -255,9 +237,6 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.tools-cache.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
+          key: tools-cache-${{ runner.os }}-${{ needs.tools-cache.outputs.week }}
       - run: task -t Taskfile.go.yml go-vet
         working-directory: ${{ matrix.dir }}
