@@ -34,7 +34,7 @@ tasks:
     cmds:
       - '{{ .GO_TOOL_CMD }} goimports -w .'
       - '{{ .GO_TOOL_CMD }} gci write --skip-generated --skip-vendor -s standard -s default .'
-      - '{{ .GO_TOOL_CMD }} gofumpt'
+      - '{{ .GO_TOOL_CMD }} gofumpt -extra -w .'
       - '{{ .GO_TOOL_CMD }} golines --ignore-generated --tab-len=1 --max-len=120 --write-output .'
       - git diff --exit-code
 
