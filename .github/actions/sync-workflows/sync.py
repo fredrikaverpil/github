@@ -16,12 +16,6 @@ MANAGED_HEADER = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
 # Source: https://github.com/fredrikaverpil/github
 """
 
-MANAGED_HEADER_WITH_DATE = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
-# This file is automatically updated during sync operations
-# Source: https://github.com/fredrikaverpil/github
-# Last synced: {date}
-"""
-
 
 def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None:
     """Copy a file with a specific header prepended or replaced."""
@@ -49,7 +43,6 @@ def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
     """Copy a managed file with appropriate header."""
-    # header = MANAGED_HEADER_WITH_DATE.format(date=datetime.now().strftime("%Y-%m-%d"))
     header = MANAGED_HEADER
     add_header_to_file(src_path, dst_path, header)
     print(f"  - Updated {os.path.basename(dst_path)}")
