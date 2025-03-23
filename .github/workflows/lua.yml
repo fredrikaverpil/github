@@ -51,9 +51,9 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: task-${{ runner.os }}-${{ needs.get-date.outputs.week }}
+          key: stylua-${{ runner.os }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
-            task-${{ runner.os }}-
+            stylua-${{ runner.os }}-
       - name: Install task
         # FIXME: figure out better way to supply task as part of tools
         run: go install github.com/go-task/task/v3/cmd/task@latest
