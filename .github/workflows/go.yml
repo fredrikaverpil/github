@@ -189,6 +189,7 @@ jobs:
         id: date
         run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
       - uses: actions/cache@v4
+        # NOTE: used so to 'task' is available
         with:
           path: |
             ~/go/bin
