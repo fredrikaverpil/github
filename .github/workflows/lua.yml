@@ -31,8 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: ls -alh
-        working-directory: ${{ matrix.dir }}
       - run: pwd
         working-directory: ${{ matrix.dir }}
       - name: Set up Go
@@ -42,8 +40,6 @@ jobs:
       - name: Install task
         # FIXME: figure out better way to supply task as part of tools
         run: go install github.com/go-task/task/v3/cmd/task@latest
-      - name: Debug print stylua.toml
-        run: cat stylua.toml
         working-directory: ${{ matrix.dir }}
       - name: Check formatting with stylua
         run: task -t Taskfile.lua.yml format
