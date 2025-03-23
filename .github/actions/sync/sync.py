@@ -92,6 +92,14 @@ def copy_file(
         workflow_prefix: If provided, add this prefix to the filename for workflows
         repo_dir: Repository root directory
     """
+
+    # If .syncignore exists in dst_path, skip copying the file
+    parent_dst_dir = os.path.dirname(dst_path)
+    syncignore_path = os.path.join(parent_dst_dir, ".syncignore")
+    if os.path.exists(syncignore_path):
+        print(f"  - Skipping {os.path.basename(dst_path)} (.syncignore exists)")
+        return
+
     # Handle workflow prefix if provided
     if workflow_prefix:
         filename = os.path.basename(dst_path)
