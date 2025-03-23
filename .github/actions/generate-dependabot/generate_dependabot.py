@@ -4,87 +4,64 @@ import sys
 import argparse
 
 
-def detect_package_ecosystem(directory: str) -> str | None:
+def detect_package_ecosystems(directory: str) -> list[str]:
     """
-    Detect the correct package ecosystem for a directory.
-    Returns a tuple of (ecosystem_name, priority)
-    Higher priority will override lower priority if multiple ecosystems found.
+    Detect all package ecosystems in a directory.
+    Returns a list of detected ecosystem names.
     """
-    # Check for specific files with priority
-    file_ecosystem_map: dict[str, tuple[str, int]] = {
+    # Map of file indicators to ecosystems
+    file_ecosystem_map: dict[str, str] = {
         # Python ecosystem detection
-        "uv.lock": ("uv", 100),  # Highest priority for Python
-        "poetry.lock": ("pip", 90),
-        "pyproject.toml": ("pip", 80),
-        "requirements.txt": ("pip", 70),
-        "setup.py": ("pip", 60),
-        "Pipfile.lock": ("pip", 50),
-        "Pipfile": ("pip", 40),
+        "uv.lock": "uv",
         # Go ecosystem detection
-        "go.mod": ("gomod", 100),
-        "go.sum": ("gomod", 90),
+        "go.mod": "gomod",  # Only need go.mod, not go.sum
         # Node ecosystem detection
-        "package-lock.json": ("npm", 100),
-        "yarn.lock": ("npm", 90),
-        "pnpm-lock.yaml": ("npm", 85),
-        "package.json": ("npm", 80),
-        "bun.lockb": ("bun", 100),
+        "package.json": "npm",  # Primary specification file
         # Docker ecosystem detection
-        "Dockerfile": ("docker", 80),
-        "docker-compose.yml": ("docker-compose", 100),
-        "docker-compose.yaml": ("docker-compose", 100),
+        "Dockerfile": "docker",
+        "docker-compose.yml": "docker-compose",
+        "docker-compose.yaml": "docker-compose",
         # Ruby ecosystem detection
-        "Gemfile": ("bundler", 90),
-        "Gemfile.lock": ("bundler", 100),
+        "Gemfile": "bundler",
         # PHP ecosystem detection
-        "composer.json": ("composer", 90),
-        "composer.lock": ("composer", 100),
+        "composer.json": "composer",
         # Rust ecosystem detection
-        "Cargo.toml": ("cargo", 90),
-        "Cargo.lock": ("cargo", 100),
+        "Cargo.toml": "cargo",  # Only need Cargo.toml, not Cargo.lock
         # .NET ecosystem detection
-        "packages.config": ("nuget", 100),
-        "paket.lock": ("nuget", 90),
-        "global.json": ("dotnet-sdk", 100),
-        "Directory.Packages.props": ("nuget", 95),
+        "packages.config": "nuget",
+        "global.json": "dotnet-sdk",
+        "Directory.Packages.props": "nuget",
         # Elixir ecosystem detection
-        "mix.exs": ("mix", 90),
-        "mix.lock": ("mix", 100),
+        "mix.exs": "mix",
         # Elm ecosystem detection
-        "elm.json": ("elm", 90),
-        "elm-package.json": ("elm", 100),
+        "elm.json": "elm",
         # Gradle ecosystem detection
-        "build.gradle": ("gradle", 90),
-        "build.gradle.kts": ("gradle", 90),
-        "gradle-wrapper.properties": ("gradle", 100),
+        "build.gradle": "gradle",
+        "build.gradle.kts": "gradle",
         # Maven ecosystem detection
-        "pom.xml": ("maven", 100),
+        "pom.xml": "maven",
         # Dart/Flutter ecosystem detection
-        "pubspec.yaml": ("pub", 90),
-        "pubspec.lock": ("pub", 100),
+        "pubspec.yaml": "pub",
         # Swift ecosystem detection
-        "Package.swift": ("swift", 100),
+        "Package.swift": "swift",
         # Terraform ecosystem detection
-        "main.tf": ("terraform", 90),
-        ".terraform.lock.hcl": ("terraform", 100),
+        "main.tf": "terraform",
         # Dev containers detection
-        "devcontainer.json": ("devcontainers", 100),
-        ".devcontainer.json": ("devcontainers", 90),
+        "devcontainer.json": "devcontainers",
+        ".devcontainer.json": "devcontainers",
         # Git submodule detection
-        ".gitmodules": ("gitsubmodule", 100),
+        ".gitmodules": "gitsubmodule",
     }
-    found_ecosystems: list[tuple[str, int]] = []
+
+    # Set to track unique ecosystems
+    found_ecosystems = set()
 
     # Check for each file type
-    for filename, (ecosystem, priority) in file_ecosystem_map.items():
+    for filename, ecosystem in file_ecosystem_map.items():
         if os.path.exists(os.path.join(directory, filename)):
-            found_ecosystems.append((ecosystem, priority))
+            found_ecosystems.add(ecosystem)
 
-    if not found_ecosystems:
-        return None
-
-    # Return the highest priority ecosystem
-    return sorted(found_ecosystems, key=lambda x: x[1], reverse=True)[0][0]
+    return list(found_ecosystems)
 
 
 def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
@@ -97,8 +74,8 @@ def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
     ecosystem_dirs: dict[str, list[str]] = {}
 
     for directory in directories:
-        ecosystem = detect_package_ecosystem(directory)
-        if ecosystem:
+        ecosystems = detect_package_ecosystems(directory)
+        for ecosystem in ecosystems:
             if ecosystem not in ecosystem_dirs:
                 ecosystem_dirs[ecosystem] = []
             ecosystem_dirs[ecosystem].append(directory)
