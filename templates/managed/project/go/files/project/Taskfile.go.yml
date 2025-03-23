@@ -61,7 +61,7 @@ tasks:
     # gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
     desc: Check for gopls errors
     cmds:
-      - task: ensure-stylua
+      - task: ensure-gopls
       - gopls stats
       - find . -name "*.go" | xargs -P $(nproc) gopls check
 
@@ -70,7 +70,7 @@ tasks:
     cmds:
       - go install golang.org/x/tools/gopls@latest
 
-  ensure-stylua:
+  ensure-gopls:
     internal: true
     status:
       - which gopls >/dev/null 2>&1
