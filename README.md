@@ -189,8 +189,15 @@ more details.
 
 ## To do
 
+Tools:
+
+- [ ] Rename `tools` to `.tools`?
+- [ ] Do not rely on cache `get-date`.
 - [ ] Make `task` part of default tooling.
-- [ ] Cache `stylua` cargo build.
+- [ ] Cache `stylua` and cargo build.
+
+Other:
+
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
