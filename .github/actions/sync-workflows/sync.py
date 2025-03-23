@@ -50,8 +50,7 @@ def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
 def copy_managed_file(src_path: str, dst_path: str) -> None:
     """Copy a managed file with appropriate header."""
     # header = MANAGED_HEADER_WITH_DATE.format(date=datetime.now().strftime("%Y-%m-%d"))
-    header = MANAGED_HEADER
-    add_header_to_file(src_path, dst_path, header)
+    add_header_to_file(src_path, dst_path, MANAGED_HEADER)
     print(f"  - Updated {os.path.basename(dst_path)}")
 
 
