@@ -105,15 +105,7 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-      - run: goimports -w .
-        working-directory: ${{ matrix.dir }}
-      - run: gci write --skip-generated --skip-vendor -s standard -s default .
-        working-directory: ${{ matrix.dir }}
-      - run: gofumpt
-        working-directory: ${{ matrix.dir }}
-      - run: golines --ignore-generated --tab-len=1 --max-len=120 --write-output .
-        working-directory: ${{ matrix.dir }}
-      - run: git diff --exit-code
+      - run: task -t Taskfile.go.yml format
         working-directory: ${{ matrix.dir }}
 
   golangci-lint:
@@ -170,7 +162,7 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-      - run: govulncheck ./...
+      - run: task -t Taskfile.go.yml govulncheck
         working-directory: ${{ matrix.dir }}
 
   # TODO: apply quickfixes using gopls (maybe as separate job): gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
@@ -207,12 +199,7 @@ jobs:
             gopls-${{ runner.os }}-go${{ matrix.go-version }}-
             gopls-${{ runner.os }}-
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts. Therefore we install it here.
-      - run: go install golang.org/x/tools/gopls@latest
-      - run: gopls stats
-        working-directory: ${{ matrix.dir }}
-      - run: find . -name "*.go" | xargs -P $(nproc) gopls check
-        working-directory: ${{ matrix.dir }}
-      - run: git diff --exit-code
+      - run: task -t Taskfile.go.yml gopls
         working-directory: ${{ matrix.dir }}
 
   gosec:
@@ -239,7 +226,7 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-      - run: gosec ./...
+      - run: task -t Taskfile.go.yml gosec
         working-directory: ${{ matrix.dir }}
 
   go-test:
@@ -259,7 +246,7 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
-      - run: go test ./...
+      - run: task -t Taskfile.go.yml go-test
         working-directory: ${{ matrix.dir }}
 
   go-vet:
@@ -278,5 +265,5 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
-      - run: go vet ./...
+      - run: task -t Taskfile.go.yml go-vet
         working-directory: ${{ matrix.dir }}

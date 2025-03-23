@@ -55,6 +55,8 @@ runs:
         ls -alh
         cat ${{ github.workspace }}/.golangci.yml
 
+    # TODO: use taskfile, allow passing in arguments to taskfile
+
     - name: show supported linters
       shell: bash
       run: golangci-lint help linters
