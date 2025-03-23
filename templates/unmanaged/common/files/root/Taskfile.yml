@@ -1,0 +1,32 @@
+# SAFE TO CUSTOMIZE - This file is copied once and not overwritten during sync
+# Source: https://github.com/fredrikaverpil/github
+
+version: '3'
+
+vars:
+  LANG_TASKFILES:
+    sh: find . -type f -name "Taskfile.*.yml" -not -path "*/node_modules/*" -not -path "*/.git/*" | sort
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task -t Taskfile.lua.yml --list
+
+  format-all:
+    desc: Run format task from all language taskfiles
+    cmds:
+      - cmd: task -t {{.TASKFILE}} format
+        for:
+          var: LANG_TASKFILES
+          split: "\n"
+          as: TASKFILE
+
+  lint-all:
+    desc: Run lint task from all language taskfiles
+    cmds:
+      - cmd: task -t {{.TASKFILE}} lint
+        for:
+          var: LANG_TASKFILES
+          split: "\n"
+          as: TASKFILE
