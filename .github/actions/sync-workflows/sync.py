@@ -22,12 +22,8 @@ MANAGED_HEADER_WITH_DATE = """# MANAGED BY fredrikaverpil/github - DO NOT EDIT
 # Last synced: {date}
 """
 
-UNMANAGED_HEADER = """# SAFE TO CUSTOMIZE - This file is copied once and not overwritten during sync
-# Source: https://github.com/fredrikaverpil/github
-"""
 
-
-def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
+def add_header_to_file(src_path: str, dst_path: str, header: str | None) -> None:
     """Copy a file with a specific header prepended or replaced."""
     with open(src_path, "r") as src_file:
         content = src_file.read()
@@ -35,19 +31,20 @@ def add_header_to_file(src_path: str, dst_path: str, header: str) -> None:
     # Check if the file already has a managed header
     import re
 
-    header_pattern = r"^# MANAGED BY fredrikaverpil/github.*?(?=\n[^#]|\Z)"
-    if re.search(header_pattern, content, re.DOTALL | re.MULTILINE):
-        # Replace existing header with new header
-        content = re.sub(
-            header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
-        )
-        with open(dst_path, "w") as dst_file:
-            _ = dst_file.write(content)
-    else:
-        # Insert header at the beginning of the file
-        with open(dst_path, "w") as dst_file:
-            _ = dst_file.write(header)
-            _ = dst_file.write(content)
+    if header is not None:
+        header_pattern = r"^# MANAGED BY fredrikaverpil/github.*?(?=\n[^#]|\Z)"
+        if re.search(header_pattern, content, re.DOTALL | re.MULTILINE):
+            # Replace existing header with new header
+            content = re.sub(
+                header_pattern, header.rstrip(), content, flags=re.DOTALL | re.MULTILINE
+            )
+            with open(dst_path, "w") as dst_file:
+                _ = dst_file.write(content)
+        else:
+            # Insert header at the beginning of the file
+            with open(dst_path, "w") as dst_file:
+                _ = dst_file.write(header)
+                _ = dst_file.write(content)
 
 
 def copy_managed_file(src_path: str, dst_path: str) -> None:
@@ -64,7 +61,7 @@ def copy_unmanaged_file(src_path: str, dst_path: str) -> None:
         print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")
         return
 
-    add_header_to_file(src_path, dst_path, UNMANAGED_HEADER)
+    add_header_to_file(src_path, dst_path, None)
     print(f"  - Added {os.path.basename(dst_path)}")
 
 
