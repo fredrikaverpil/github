@@ -54,10 +54,11 @@ jobs:
           key: stylua-${{ runner.os }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
             stylua-${{ runner.os }}-
-      - name: Install task
-        # FIXME: figure out better way to supply task as part of tools
-        run: go install github.com/go-task/task/v3/cmd/task@latest
-        working-directory: ${{ matrix.dir }}
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check formatting with stylua
         run: task -t Taskfile.lua.yml format
         working-directory: ${{ matrix.dir }}
