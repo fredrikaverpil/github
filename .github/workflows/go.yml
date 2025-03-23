@@ -259,6 +259,16 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml go-test
         working-directory: ${{ matrix.dir }}
 
@@ -278,5 +288,15 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/bin
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml go-vet
         working-directory: ${{ matrix.dir }}
