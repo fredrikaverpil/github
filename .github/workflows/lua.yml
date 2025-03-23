@@ -31,9 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Check formatting
-        uses: JohnnyMorganz/stylua-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: latest
-          args: --check ${{ matrix.dir }}
+      - name: Check formatting with stylua
+        run: task -t Taskfile.lua.yml format
+        working-directory: ${{ matrix.dir }}
