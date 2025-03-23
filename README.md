@@ -95,8 +95,12 @@ not already exist.
 
 ## Assumptions
 
-- CI is set up for local-first development. Everything that runs in CI must be
-  invoked in a way so that it can also be reproduced locally.
+- Churn and getting out of sync is avoided by storing managed workflows,
+  actions, files and scripts centrally in this repo.
+- CI is set up for local-first development. Everything that executes in the
+  target project's CI must be invoked in a way so that it can also be reproduced
+  locally.
+- All dependency versions management is delegated to the target project.
 - The user is expected to open their editor in the git repo root. This is where
   commandline tasks are carried out (e.g. `Taskfile.yml` commands).
 
@@ -185,6 +189,8 @@ more details.
 
 ## To do
 
+- [ ] Make `task` part of default tooling.
+- [ ] Cache `stylua` cargo build.
 - [ ] Sync issue template.
 - [ ] Sync PR template.
 - [ ] Generate `Taskfile.yml` for projects.
