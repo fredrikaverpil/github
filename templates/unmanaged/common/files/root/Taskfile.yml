@@ -11,7 +11,7 @@ tasks:
   default:
     desc: List all available tasks
     cmds:
-      - task -t Taskfile.lua.yml --list
+      - task --list
 
   format-all:
     desc: Run format task from all taskfiles
