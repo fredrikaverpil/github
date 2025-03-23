@@ -108,6 +108,9 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml format
         working-directory: ${{ matrix.dir }}
 
@@ -135,6 +138,9 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
         with:
           working-directory: ${{ matrix.dir }}
@@ -165,6 +171,9 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml govulncheck
         working-directory: ${{ matrix.dir }}
 
@@ -197,8 +206,8 @@ jobs:
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
           restore-keys: |
-            gopls-${{ runner.os }}-go${{ matrix.go-version }}-
-            gopls-${{ runner.os }}-
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts. Therefore we install it here.
       - run: task -t Taskfile.go.yml gopls
         working-directory: ${{ matrix.dir }}
@@ -227,6 +236,9 @@ jobs:
             ~/go/pkg/mod
             ~/.cache/go-build
           key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
+          restore-keys: |
+            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
+            go-tool-${{ runner.os }}-
       - run: task -t Taskfile.go.yml gosec
         working-directory: ${{ matrix.dir }}
 
