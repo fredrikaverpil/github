@@ -127,27 +127,51 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Generate dependabot.yml configuration"
     )
-    _ = parser.add_argument(
+
+    # Create a mutually exclusive group for different input methods
+    input_group = parser.add_mutually_exclusive_group(required=True)
+
+    _ = input_group.add_argument(
         "--matrix",
-        required=True,
-        help="JSON matrix of directories from find-dirs action",
+        help='JSON matrix of directories from find-dirs action (e.g. \'{"dir": ["."]})\'',
         type=str,
     )
+
+    _ = input_group.add_argument(
+        "--dirs",
+        help="Comma-separated list of directories to scan (e.g. '.,src,packages/app')",
+        type=str,
+    )
+
+    _ = input_group.add_argument(
+        "--stdin",
+        action="store_true",
+        help="Read directories from stdin (one per line)",
+    )
+
     _ = parser.add_argument(
         "--output",
         default=".github/dependabot.yml",
         help="Output file path (default: .github/dependabot.yml)",
         type=str,
     )
+
     args: argparse.Namespace = parser.parse_args()
 
-    try:
-        # Explicitly annotate args.matrix as str before passing to json.loads
-        matrix_input: str = args.matrix
-        matrix_data: dict[str, list[str]] = json.loads(matrix_input)
-    except json.JSONDecodeError:
-        print("Error: Invalid JSON matrix input", file=sys.stderr)
-        return 1
+    # Process directories based on input method
+    matrix_data: dict[str, list[str]] = {}
+    if args.matrix:
+        try:
+            matrix_data = json.loads(args.matrix)
+        except json.JSONDecodeError:
+            print("Error: Invalid JSON matrix input", file=sys.stderr)
+            return 1
+    elif args.dirs:
+        dir_list = [d.strip() for d in args.dirs.split(",") if d.strip()]
+        matrix_data = {"dir": dir_list}
+    elif args.stdin:
+        dir_list = [line.strip() for line in sys.stdin if line.strip()]
+        matrix_data = {"dir": dir_list}
 
     # Generate dependabot configuration
     config_content = generate_dependabot_config(matrix_data)
