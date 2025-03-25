@@ -1,7 +1,51 @@
-import os
-import json
-import sys
 import argparse
+import json
+import os
+import sys
+
+# Map of file indicators to ecosystems
+FILE_ECOSYSTEM_MAP: dict[str, str] = {
+    # Python ecosystem detection
+    "uv.lock": "uv",
+    # Go ecosystem detection
+    "go.mod": "gomod",  # Only need go.mod, not go.sum
+    # Node ecosystem detection
+    "package.json": "npm",  # Primary specification file
+    # Docker ecosystem detection
+    "Dockerfile": "docker",
+    "docker-compose.yml": "docker-compose",
+    "docker-compose.yaml": "docker-compose",
+    # Ruby ecosystem detection
+    "Gemfile": "bundler",
+    # PHP ecosystem detection
+    "composer.json": "composer",
+    # Rust ecosystem detection
+    "Cargo.toml": "cargo",  # Only need Cargo.toml, not Cargo.lock
+    # .NET ecosystem detection
+    "packages.config": "nuget",
+    "global.json": "dotnet-sdk",
+    "Directory.Packages.props": "nuget",
+    # Elixir ecosystem detection
+    "mix.exs": "mix",
+    # Elm ecosystem detection
+    "elm.json": "elm",
+    # Gradle ecosystem detection
+    "build.gradle": "gradle",
+    "build.gradle.kts": "gradle",
+    # Maven ecosystem detection
+    "pom.xml": "maven",
+    # Dart/Flutter ecosystem detection
+    "pubspec.yaml": "pub",
+    # Swift ecosystem detection
+    "Package.swift": "swift",
+    # Terraform ecosystem detection
+    "main.tf": "terraform",
+    # Dev containers detection
+    "devcontainer.json": "devcontainers",
+    ".devcontainer.json": "devcontainers",
+    # Git submodule detection
+    ".gitmodules": "gitsubmodule",
+}
 
 
 def detect_package_ecosystems(directory: str) -> list[str]:
@@ -9,59 +53,34 @@ def detect_package_ecosystems(directory: str) -> list[str]:
     Detect all package ecosystems in a directory.
     Returns a list of detected ecosystem names.
     """
-    # Map of file indicators to ecosystems
-    file_ecosystem_map: dict[str, str] = {
-        # Python ecosystem detection
-        "uv.lock": "uv",
-        # Go ecosystem detection
-        "go.mod": "gomod",  # Only need go.mod, not go.sum
-        # Node ecosystem detection
-        "package.json": "npm",  # Primary specification file
-        # Docker ecosystem detection
-        "Dockerfile": "docker",
-        "docker-compose.yml": "docker-compose",
-        "docker-compose.yaml": "docker-compose",
-        # Ruby ecosystem detection
-        "Gemfile": "bundler",
-        # PHP ecosystem detection
-        "composer.json": "composer",
-        # Rust ecosystem detection
-        "Cargo.toml": "cargo",  # Only need Cargo.toml, not Cargo.lock
-        # .NET ecosystem detection
-        "packages.config": "nuget",
-        "global.json": "dotnet-sdk",
-        "Directory.Packages.props": "nuget",
-        # Elixir ecosystem detection
-        "mix.exs": "mix",
-        # Elm ecosystem detection
-        "elm.json": "elm",
-        # Gradle ecosystem detection
-        "build.gradle": "gradle",
-        "build.gradle.kts": "gradle",
-        # Maven ecosystem detection
-        "pom.xml": "maven",
-        # Dart/Flutter ecosystem detection
-        "pubspec.yaml": "pub",
-        # Swift ecosystem detection
-        "Package.swift": "swift",
-        # Terraform ecosystem detection
-        "main.tf": "terraform",
-        # Dev containers detection
-        "devcontainer.json": "devcontainers",
-        ".devcontainer.json": "devcontainers",
-        # Git submodule detection
-        ".gitmodules": "gitsubmodule",
-    }
-
     # Set to track unique ecosystems
     found_ecosystems: set[str] = set()
 
     # Check for each file type
-    for filename, ecosystem in file_ecosystem_map.items():
+    for filename, ecosystem in FILE_ECOSYSTEM_MAP.items():
         if os.path.exists(os.path.join(directory, filename)):
             found_ecosystems.add(ecosystem)
 
     return list(found_ecosystems)
+
+
+def recursively_scan_directories(root_dir: str) -> list[str]:
+    """
+    Recursively scan directories for dependency files and return directories
+    that contain at least one dependency file.
+    """
+    directories_with_deps = set()
+
+    for dirpath, _, filenames in os.walk(root_dir):
+        if any(indicator in filenames for indicator in FILE_ECOSYSTEM_MAP.keys()):
+            # Convert to relative path if root_dir is not "."
+            if root_dir != "." and dirpath.startswith(root_dir):
+                rel_path = os.path.relpath(dirpath, os.getcwd())
+                directories_with_deps.add(rel_path)
+            else:
+                directories_with_deps.add(dirpath)
+
+    return list(directories_with_deps)
 
 
 def generate_dependabot_config(directory_matrix: dict[str, list[str]]) -> str:
@@ -144,6 +163,15 @@ def main() -> int:
     )
 
     _ = input_group.add_argument(
+        "--scan",
+        help="Recursively scan for dependency files (default: current directory)",
+        type=str,
+        nargs="?",  # Makes the argument optional
+        const=".",  # Default value if flag is provided without a value
+        default=None,  # No default - still makes the parent group required
+    )
+
+    _ = input_group.add_argument(
         "--stdin",
         action="store_true",
         help="Read directories from stdin (one per line)",
@@ -168,6 +196,9 @@ def main() -> int:
             return 1
     elif args.dirs:
         dir_list = [d.strip() for d in args.dirs.split(",") if d.strip()]
+        matrix_data = {"dir": dir_list}
+    elif args.recursive:
+        dir_list = recursively_scan_directories(args.recursive)
         matrix_data = {"dir": dir_list}
     elif args.stdin:
         dir_list = [line.strip() for line in sys.stdin if line.strip()]
