@@ -152,7 +152,7 @@ def main() -> int:
 
     _ = input_group.add_argument(
         "--matrix",
-        help='JSON matrix of directories from find-dirs action (e.g. \'{"dir": ["."]})\'',
+        help='JSON matrix of directories from find-dirs action (e.g. \'{"dir": [".", "src", "packages/app"]})\'',
         type=str,
     )
 
@@ -164,7 +164,7 @@ def main() -> int:
 
     _ = input_group.add_argument(
         "--scan",
-        help="Recursively scan for dependency files (default: current directory)",
+        help="Recursively scan for dependency files (default: .)",
         type=str,
         nargs="?",  # Makes the argument optional
         const=".",  # Default value if flag is provided without a value
