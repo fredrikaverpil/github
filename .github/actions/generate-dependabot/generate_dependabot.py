@@ -197,8 +197,8 @@ def main() -> int:
     elif args.dirs:
         dir_list = [d.strip() for d in args.dirs.split(",") if d.strip()]
         matrix_data = {"dir": dir_list}
-    elif args.recursive:
-        dir_list = recursively_scan_directories(args.recursive)
+    elif args.scan:
+        dir_list = recursively_scan_directories(args.scan)
         matrix_data = {"dir": dir_list}
     elif args.stdin:
         dir_list = [line.strip() for line in sys.stdin if line.strip()]
