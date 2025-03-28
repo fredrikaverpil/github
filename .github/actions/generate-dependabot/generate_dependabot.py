@@ -76,6 +76,9 @@ def recursively_scan_directories(root_dir: str) -> list[str]:
             # Convert to relative path if root_dir is not "."
             if root_dir != "." and dirpath.startswith(root_dir):
                 rel_path = os.path.relpath(dirpath, os.getcwd())
+                # exclude the ./tools directory, as we hard-code it so we can specify indirect updates
+                if rel_path.startswith("tools/"):
+                    continue
                 directories_with_deps.add(rel_path)
             else:
                 directories_with_deps.add(dirpath)
@@ -113,7 +116,19 @@ updates:
     groups:
       github-actions:
         patterns: ["*"]
-    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "gomod"
+    directories: ["./tools"]
+    allow:
+      - dependency-type: indirect
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      github-actions:
+        patterns: ["*"]
     labels:
       - "dependencies"
 """
@@ -134,7 +149,6 @@ updates:
       {ecosystem}-minor-patch:
         patterns: ["*"]
         update-types: ["minor", "patch"]
-    open-pull-requests-limit: 10
     labels:
       - "dependencies"
 """
