@@ -124,7 +124,7 @@ updates:
       interval: "weekly"
       day: "monday"
     groups:
-      github-actions:
+      go-tools:
         patterns: ["*"]
     labels:
       - "dependencies"
