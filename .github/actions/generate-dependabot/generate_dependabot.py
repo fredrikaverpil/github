@@ -76,9 +76,6 @@ def recursively_scan_directories(root_dir: str) -> list[str]:
             # Convert to relative path if root_dir is not "."
             if root_dir != "." and dirpath.startswith(root_dir):
                 rel_path = os.path.relpath(dirpath, os.getcwd())
-                # exclude the ./tools directory, as we hard-code it so we can specify indirect updates
-                if rel_path == "tools":
-                    continue
                 directories_with_deps.add(rel_path)
             else:
                 directories_with_deps.add(dirpath)
@@ -136,7 +133,7 @@ updates:
     # Add ecosystem-specific configurations
     for ecosystem, dirs in ecosystem_dirs.items():
         # Format directories as YAML list
-        dir_entries = "\n".join(f"      - {d}" for d in dirs)
+        dir_entries = "\n".join(f"      - {d}" for d in dirs if d != "tools")
 
         config += f"""
   - package-ecosystem: "{ecosystem}"
