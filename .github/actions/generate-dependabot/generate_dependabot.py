@@ -77,7 +77,8 @@ def recursively_scan_directories(root_dir: str) -> list[str]:
             if root_dir != "." and dirpath.startswith(root_dir):
                 rel_path = os.path.relpath(dirpath, os.getcwd())
                 # exclude the ./tools directory, as we hard-code it so we can specify indirect updates
-                print(rel_path)
+                if rel_path == "tools":
+                    continue
                 directories_with_deps.add(rel_path)
             else:
                 directories_with_deps.add(dirpath)
