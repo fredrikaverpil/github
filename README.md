@@ -191,10 +191,19 @@ more details.
 
 Tools:
 
+- [ ] Add docs on that the managed `Taskfile.[lang].yml` contains all the
+      possible tasks. The unmanaged `Taskfile.yml` then chooses what to use.
+      Ideally, CI would call `Taskfile.yml` but this will add considerable
+      amount of complexity, if we want to keep the CI optimizations in place,
+      which runs each task as a separate job.
 - [ ] Rename `tools` to `.tools`?
-- [ ] Do not rely on cache `get-date`.
+- [ ] Install binaries in `.tools/bin` or potentially `.tools/[tool-name]/bin`.
+      Have Taskfiles prepend that path to `$PATH`, so we can be sure those
+      binaries are indeed being used. Then have cache use those folders too.
+- [ ] Do not rely on cache `get-date`. Get SHA from lockfile instead.
 - [ ] Make `task` part of default tooling.
 - [ ] Cache `stylua` and cargo build.
+- [ ] Store `stylua.toml` in project root, like `.golangci.yml`.
 
 Other:
 
