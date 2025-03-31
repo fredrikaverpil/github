@@ -191,6 +191,7 @@ more details.
 
 Tools:
 
+- [ ] Review `.golangci.yml`.
 - [ ] Add docs on that the managed `Taskfile.[lang].yml` contains all the
       possible tasks. The unmanaged `Taskfile.yml` then chooses what to use.
       Ideally, CI would call `Taskfile.yml` but this will add considerable
