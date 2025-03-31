@@ -121,7 +121,7 @@ Add tools into the repo's `tools/go.mod`:
 mkdir tools && cd tools
 go mod init github.com/fredrikaverpil/<project>/tools
 
-go get -tool github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+go get -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 go get -tool golang.org/x/vuln/cmd/govulncheck@latest
 go get -tool github.com/securego/gosec/v2/cmd/gosec@latest
 go get -tool golang.org/x/tools/cmd/goimports@latest
