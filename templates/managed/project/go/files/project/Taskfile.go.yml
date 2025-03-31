@@ -5,6 +5,8 @@
 version: '3'
 
 vars:
+  ROOT_DIR:
+    sh: git rev-parse --show-toplevel
   TOOLS_DIR:
     sh: |
       git_root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -35,7 +37,7 @@ tasks:
     desc: Lint with golangci-lint
     aliases: ["lint"]
     cmds:
-      - '{{ .GO_TOOL_CMD }} golangci-lint run -v ./...'
+      - '{{ .GO_TOOL_CMD }} golangci-lint --config {{ .ROOT_DIR }}/.golangci.yml run -v ./...'
 
   govulncheck:
     desc: Check vulnerabilities with govulncheck

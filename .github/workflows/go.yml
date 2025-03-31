@@ -11,16 +11,6 @@ on:
         required: false
         type: string
         default: '["ubuntu-latest"]' # comma-separated list of versions
-      golangci-config-source:
-        description: 'Source for golangci-lint config (local, golden-latest, golden-revision, central)'
-        required: false
-        type: string
-        default: 'golden-latest'
-      golangci-gist-revision:
-        description: 'Specific Gist revision SHA (used only with golden-revision source)'
-        required: false
-        type: string
-        default: ''
       skip-golangci:
         description: 'Skip running golangci-lint job'
         required: false
@@ -143,11 +133,8 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
-      - uses: fredrikaverpil/github/.github/actions/golangci-lint@main
-        with:
-          working-directory: ${{ matrix.dir }}
-          config-source: ${{ inputs.golangci-config-source }}
-          gist-revision: ${{ inputs.golangci-gist-revision }}
+      - run: task -t Taskfile.go.yml golangci-lint
+        working-directory: ${{ matrix.dir }}
 
   govulncheck:
     needs: [find-dirs, get-date, go-tool-cache]
