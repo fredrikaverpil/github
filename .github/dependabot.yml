@@ -18,6 +18,8 @@ updates:
       - tools
     schedule:
       interval: "monthly"
+    allow:
+      - dependency-type: indirect
     groups:
       go:
         patterns: ["*"]
