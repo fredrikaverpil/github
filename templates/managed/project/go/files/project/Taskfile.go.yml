@@ -24,7 +24,7 @@ tasks:
 
   golangci-lint:
     desc: Lint with golangci-lint
-    aliaes: ["lint"]
+    aliases: ["lint"]
     cmds:
       - '{{ .GO_TOOL_CMD }} golangci-lint run -v ./...'
 
