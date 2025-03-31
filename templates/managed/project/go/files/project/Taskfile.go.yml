@@ -30,7 +30,7 @@ tasks:
 
   format:
     desc: Format with goimports, gci, gofumpt and golines
-    aliases: ["lint"]
+    aliases: ["format"]
     cmds:
       - '{{ .GO_TOOL_CMD }} goimports -w .'
       - '{{ .GO_TOOL_CMD }} gci write --skip-generated --skip-vendor -s standard -s default .'
