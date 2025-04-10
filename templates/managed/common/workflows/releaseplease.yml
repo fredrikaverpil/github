@@ -14,4 +14,4 @@ jobs:
   title:
     uses: fredrikaverpil/github/.github/workflows/release-please.yml@main
     secrets:
-      SYNC_TOKEN: ${{ SYNC_TOKEN }}
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
