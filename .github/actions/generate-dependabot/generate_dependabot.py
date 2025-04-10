@@ -120,13 +120,13 @@ updates:
 
     # Add ecosystem-specific configurations
     for ecosystem, dirs in ecosystem_dirs.items():
-        # TODO: skip this for now, figure out later.
-        # This should be its own entry, separate from production dependencies.
         if dirs == ["tools"]:
+            # TODO: skip this for now, figure out later.
+            # This should be its own entry, separate from production dependencies.
             continue
 
-        # Format directories as YAML list
-        dirs.remove("tools")  # do not mix dev tooling into production dependencies
+        if "tools" in dirs:
+            dirs.remove("tools")  # do not mix dev tooling into production dependencies
         dir_entries = '["' + '", "'.join(dirs) + '"]'
         config += f"""
   - package-ecosystem: "{ecosystem}"
