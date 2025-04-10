@@ -115,7 +115,6 @@ updates:
         patterns: ["*"]
     labels:
       - "dependencies"
-
 """
 
     # Add ecosystem-specific configurations
