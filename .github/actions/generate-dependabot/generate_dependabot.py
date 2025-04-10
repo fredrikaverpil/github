@@ -116,25 +116,16 @@ updates:
     labels:
       - "dependencies"
 
-  - package-ecosystem: "gomod"
-    directories: ["./tools"]
-    allow:
-      - dependency-type: indirect
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    groups:
-      go-tools:
-        patterns: ["*"]
-    labels:
-      - "dependencies"
 """
 
     # Add ecosystem-specific configurations
     for ecosystem, dirs in ecosystem_dirs.items():
-        # Format directories as YAML list
-        dir_entries = "\n".join(f"      - {d}" for d in dirs if d != "tools")
+        # TODO: skip this for now, figure out later
+        if "./tools" in dirs:
+            continue
 
+        # Format directories as YAML list
+        dir_entries = '["' + '", "'.join(dirs) + '"]'
         config += f"""
   - package-ecosystem: "{ecosystem}"
     directories:
