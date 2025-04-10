@@ -69,11 +69,6 @@ jobs:
       - name: Install Go tools
         run: go install tool
         working-directory: ${{ github.workspace }}/tools
-      - name: Install Task
-        uses: arduino/setup-task@v2
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: review ~/go/bin
         run: ls -alh ~/go/bin
 
@@ -103,6 +98,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml format
         working-directory: ${{ matrix.dir }}
 
@@ -133,6 +133,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml golangci-lint
         working-directory: ${{ matrix.dir }}
 
@@ -163,6 +168,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml govulncheck
         working-directory: ${{ matrix.dir }}
 
@@ -197,6 +207,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       # NOTE: does not play well with `go tool`, causes golang.org/x/tools conflicts. Therefore we install it here.
       - run: task -t Taskfile.go.yml gopls
         working-directory: ${{ matrix.dir }}
@@ -228,6 +243,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml gosec
         working-directory: ${{ matrix.dir }}
 
@@ -260,6 +280,11 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml go-test
         working-directory: ${{ matrix.dir }}
 
@@ -291,5 +316,10 @@ jobs:
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: task -t Taskfile.go.yml go-vet
         working-directory: ${{ matrix.dir }}
