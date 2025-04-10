@@ -27,6 +27,7 @@ jobs:
         # https://github.com/googleapis/release-please/blob/main/docs/customizing.md
         id: release
         with:
+          token: ${{ secrets.SYNC_TOKEN }}
           config-file: ${{ steps.release-please-config.outputs.config-file }}
           release-type: ${{ steps.release-please-config.outputs.release-type }}
           # https://github.com/googleapis/release-please-action#package-options
