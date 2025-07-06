@@ -12,7 +12,7 @@ updates:
       - "dependencies"
 
   - package-ecosystem: "cargo"
-    directories: ["templates/unmanaged/project/lua/files/root/.tools"]
+    directories: ["templates/unmanaged/project/lua/files/root/tools"]
     schedule:
       interval: "monthly"
     allow:
