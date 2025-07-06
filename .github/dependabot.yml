@@ -1,27 +1,38 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directories:
-      - /
-      - .github/**/*.yml
-      - templates/**.yml
+    directories: ["/", ".github/actions/*/*.yml", ".github/actions/*/*.yaml", "action.yml", "action.yaml", "actions/*/*.yml", "actions/*/*.yaml"]
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     groups:
-      actions:
+      github-actions:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "cargo"
+    directories: ["templates/unmanaged/project/lua/files/root/tools"]
+    schedule:
+      interval: "monthly"
+    allow:
+      - dependency-type: all
+    groups:
+      cargo:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
     labels:
       - "dependencies"
 
   - package-ecosystem: "gomod"
-    directories:
-      - tools
+    directories: ["templates/unmanaged/project/go/files/root/tools"]
     schedule:
       interval: "monthly"
     allow:
-      - dependency-type: indirect
+      - dependency-type: all
     groups:
-      go:
+      gomod:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
     labels:
       - "dependencies"
