@@ -68,7 +68,7 @@ jobs:
             go-tool-${{ runner.os }}-
       - name: Install Go tools
         run: go install tool
-        working-directory: ${{ github.workspace }}/tools
+        working-directory: ${{ github.workspace }}/.tools
       - name: review ~/go/bin
         run: ls -alh ~/go/bin
 
