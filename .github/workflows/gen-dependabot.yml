@@ -1,57 +1,30 @@
-name: gen-dependabot
+name: dependabot
 
 on:
-  workflow_call:
-    inputs:
-      file_patterns:
-        description: 'File patterns to include for dependabot detection (comma-separated)'
-        required: false
-        type: string
-        default: 'uv.lock,go.mod,package.json,Dockerfile,docker-compose.yml,docker-compose.yaml,Gemfile,composer.json,Cargo.toml,packages.config,global.json,Directory.Packages.props,mix.exs,elm.json,build.gradle,build.gradle.kts,pom.xml,pubspec.yaml,Package.swift,main.tf,devcontainer.json,.devcontainer.json,.gitmodules'
-      exclude_patterns:
-        description: 'File patterns to exclude from dependabot detection (comma-separated)'
-        required: false
-        type: string
-        default: ''
-    secrets:
-      SYNC_TOKEN:
-        required: true
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"
 
 jobs:
-  find-dirs:
+  generate-dependabot:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.find-dirs.outputs.matrix }}
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: checkout repo
+      - name: Check out repo
         uses: actions/checkout@v4
-
-      - name: find project directories
-        id: find-dirs
-        uses: fredrikaverpil/github/.github/actions/find-dirs@main
-        with:
-          file_patterns: ${{ inputs.file_patterns }}
-          exclude_patterns: ${{ inputs.exclude_patterns }}
-
-  sync:
-    runs-on: ubuntu-latest
-    needs: find-dirs
-    steps:
-      - name: checkout repo
-        uses: actions/checkout@v4
-
-      - name: generate dependabot.yml
-        uses: fredrikaverpil/github/.github/actions/generate-dependabot@main
-        with:
-          matrix: ${{ needs.find-dirs.outputs.matrix }}
-
-      - name: create pull request
+      - name: Generate Dependabot Config
+        uses: fredrikaverpil/dependabot-generate@v1
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.SYNC_TOKEN }}
-          commit-message: "ci(dependabot): sync with fredrikaverpil/github"
-          title: "ci(dependabot): sync with fredrikaverpil/github"
-          body: |
-            This PR syncs the GitHub repo with a generated `dependabot.yml` from the [fredrikaverpil/github](https://github.com/fredrikaverpil/github) repository.
-          branch: ci/sync-dependabot
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(dependabot): generate dependabot.yml"
+          title: "chore(dependabot): generate dependabot.yml"
+          body: "This PR adds the generated dependabot.yml file."
+          branch: "chore/dependabot-generate"
           delete-branch: true
