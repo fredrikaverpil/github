@@ -110,7 +110,7 @@ def copy_file(
 
     # Skip Taskfiles if the destination is within the tools directory
     filename = os.path.basename(dst_path)
-    tools_dir = os.path.normpath(os.path.join(repo_dir, "tools"))
+    tools_dir = os.path.normpath(os.path.join(repo_dir, ".tools"))
     dst_path_norm = os.path.normpath(dst_path)
     is_taskfile = filename.startswith("Taskfile") and (
         filename.endswith(".yml") or filename.endswith(".yaml")

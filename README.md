@@ -35,7 +35,6 @@ and template workflows for my personal projects.
 
 1. Add the token, to the GitHub project, as a repository secret to both Actions
    and Dependabot:
-
    - Go to your repository → Settings → Secrets and variables → Actions.
    - Create a new secret named `SYNC_TOKEN` with your token value.
    - Go to your repository → Settings → Secrets and variables → Dependabot.
@@ -116,10 +115,10 @@ projects.
 
 ### Go
 
-Add tools into the repo's `tools/go.mod`:
+Add tools into the repo's `.tools/go.mod`:
 
 ```sh
-mkdir tools && cd tools
+mkdir .tools && cd .tools
 go mod init github.com/fredrikaverpil/<project>/tools
 
 go get -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
