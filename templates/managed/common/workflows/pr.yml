@@ -20,4 +20,4 @@ jobs:
   title:
     uses: fredrikaverpil/github/.github/workflows/pr.yml@main
     secrets:
-      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
