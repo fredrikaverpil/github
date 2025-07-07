@@ -197,7 +197,6 @@ Tools:
       Ideally, CI would call `Taskfile.yml` but this will add considerable
       amount of complexity, if we want to keep the CI optimizations in place,
       which runs each task as a separate job.
-- [ ] Rename `tools` to `.tools`?
 - [ ] Install binaries in `.tools/bin` or potentially `.tools/[tool-name]/bin`.
       Have Taskfiles prepend that path to `$PATH`, so we can be sure those
       binaries are indeed being used. Then have cache use those folders too.
