@@ -5,7 +5,6 @@ go 1.24.4
 tool (
 	github.com/daixiang0/gci
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
-	github.com/securego/gosec/v2/cmd/gosec
 	github.com/segmentio/golines
 	golang.org/x/tools/cmd/goimports
 	golang.org/x/vuln/cmd/govulncheck

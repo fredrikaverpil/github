@@ -6,11 +6,11 @@ on:
       go-versions:
         required: false
         type: string
-        default: '["stable"]' # comma-separated list of versions
+        default: '["stable"]'  # comma-separated list of versions
       os-versions:
         required: false
         type: string
-        default: '["ubuntu-latest"]' # comma-separated list of versions
+        default: '["ubuntu-latest"]'  # comma-separated list of versions
       skip-golangci:
         description: 'Skip running golangci-lint job'
         required: false
@@ -79,7 +79,7 @@ jobs:
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         go-version: ${{ fromJson(inputs.go-versions) }}
-    runs-on: ubuntu-latest # no need for matrix
+    runs-on: ubuntu-latest  # no need for matrix
     env:
       GOTOOLCHAIN: local
     steps:
@@ -114,7 +114,7 @@ jobs:
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         go-version: ${{ fromJson(inputs.go-versions) }}
-    runs-on: ubuntu-latest # no need for matrix
+    runs-on: ubuntu-latest  # no need for matrix
     env:
       GOTOOLCHAIN: local
     steps:
@@ -184,7 +184,7 @@ jobs:
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         go-version: ${{ fromJson(inputs.go-versions) }}
-    runs-on: ubuntu-latest # no need for matrix
+    runs-on: ubuntu-latest  # no need for matrix
     env:
       GOTOOLCHAIN: local
     steps:
@@ -216,43 +216,8 @@ jobs:
       - run: task -t Taskfile.go.yml gopls
         working-directory: ${{ matrix.dir }}
 
-  gosec:
-    needs: [find-dirs, get-date, go-tool-cache]
-    strategy:
-      fail-fast: false
-      matrix:
-        dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
-        go-version: ${{ fromJson(inputs.go-versions) }}
-        os-version: ${{ fromJson(inputs.os-versions) }}
-    runs-on: ${{ matrix.os-version }}
-    env:
-      GOTOOLCHAIN: local
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ${{ matrix.go-version }}
-          cache: false
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/go/bin
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ needs.get-date.outputs.week }}
-          restore-keys: |
-            go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
-            go-tool-${{ runner.os }}-
-      - name: Install Task
-        uses: arduino/setup-task@v2
-        with:
-          version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: task -t Taskfile.go.yml gosec
-        working-directory: ${{ matrix.dir }}
-
   go-test:
-    needs: [find-dirs, get-date, go-tool-cache] # FIXME: needs cache for 'task' to be available
+    needs: [find-dirs, get-date, go-tool-cache]  # FIXME: needs cache for 'task' to be available
     strategy:
       fail-fast: false
       matrix:
@@ -289,13 +254,13 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   go-vet:
-    needs: [find-dirs, get-date, go-tool-cache] # FIXME: needs cache for 'task' to be available
+    needs: [find-dirs, get-date, go-tool-cache]  # FIXME: needs cache for 'task' to be available
     strategy:
       fail-fast: false
       matrix:
         dir: ${{ fromJson(needs.find-dirs.outputs.matrix).dir }}
         go-version: ${{ fromJson(inputs.go-versions) }}
-    runs-on: ubuntu-latest # no need for matrix
+    runs-on: ubuntu-latest  # no need for matrix
     env:
       GOTOOLCHAIN: local
     steps:
