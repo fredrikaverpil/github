@@ -9,6 +9,7 @@ and template workflows for my personal projects.
 - [multipr](https://github.com/fredrikaverpil/multipr)
 - [neotest-golang](https://github.com/fredrikaverpil/neotest-golang)
 - [pr.nvim](https://github.com/fredrikaverpil/pr.nvim)
+- [dependabot-generate](https://github.com/fredrikaverpil/dependabot-generate)
 
 ## Quick Start: setting up a new GitHub project
 
