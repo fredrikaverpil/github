@@ -2,8 +2,9 @@ name: goreleaser
 
 on:
   workflow_dispatch:
-  tags:
-    - "v*.*.*"
+  push:
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: write
