@@ -20,7 +20,22 @@ jobs:
       - name: Generate Dependabot Config
         uses: fredrikaverpil/dependabot-generate@main  # not yet stable!
         with:
-          interval: "monthly"
+          exclude-paths: ".tools"
+          update-interval: "monthly"
+          additional-yaml: |
+            # custom updates for .tools directory
+              - package-ecosystem: "gomod"
+                directories: ["/.tools"]
+                allow:
+                  - dependency-type: indirect
+                schedule:
+                  interval: "monthly"
+                groups:
+                  gomod-tools:
+                    patterns: ["*"]
+                    update-types: ["minor", "patch"]
+                labels:
+                  - "dependencies"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
