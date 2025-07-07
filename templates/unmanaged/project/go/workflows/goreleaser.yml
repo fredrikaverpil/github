@@ -13,5 +13,4 @@ jobs:
     uses: fredrikaverpil/github/.github/workflows/goreleaser.yml@main
     with:
       go-version-file: go.mod
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit
