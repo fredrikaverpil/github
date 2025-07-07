@@ -2,9 +2,6 @@ name: release
 
 on:
   workflow_call:
-    secrets:
-      SYNC_TOKEN:
-        required: false
 
 jobs:
   please:
