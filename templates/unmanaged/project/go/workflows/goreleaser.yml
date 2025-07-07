@@ -14,5 +14,4 @@ jobs:
     with:
       go-version-file: go.mod
     secrets:
-      # pass on the GITHUB_TOKEN
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
