@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "github-actions"
     directories: ["/", ".github/actions/*/*.yml", ".github/actions/*/*.yaml", "action.yml", "action.yaml", "actions/*/*.yml", "actions/*/*.yaml"]
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     groups:
       github-actions:
         patterns: ["*"]
@@ -14,7 +14,7 @@ updates:
   - package-ecosystem: "cargo"
     directories: ["templates/unmanaged/project/lua/files/root/.tools"]
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     allow:
       - dependency-type: all
     groups:
@@ -27,7 +27,7 @@ updates:
   - package-ecosystem: "gomod"
     directories: ["templates/unmanaged/project/go/files/root/.tools"]
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     allow:
       - dependency-type: all
     groups:
