@@ -6,7 +6,7 @@ on:
       os-versions:
         required: false
         type: string
-        default: '["ubuntu-latest"]' # comma-separated list of versions
+        default: '["ubuntu-latest"]'  # comma-separated list of versions
 
 jobs:
   find-dirs:
@@ -19,7 +19,7 @@ jobs:
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
           file_patterns: stylua.toml
-          exclude_patterns: /tools
+          exclude_patterns: .tools
 
   get-date:
     runs-on: ubuntu-latest

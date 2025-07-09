@@ -28,7 +28,7 @@ jobs:
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
           file_patterns: go.mod
-          exclude_patterns: /tools
+          exclude_patterns: .tools
 
   get-date:
     runs-on: ubuntu-latest
