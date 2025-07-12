@@ -190,8 +190,14 @@ more details.
 
 ## To do
 
-Tools:
-
+- [ ] When Go has just been bumped, this error may be hit in CI if bumping Go
+      (reason is actions/setup-go is not updated yet with the latest Go version
+      and GOTOOLCHAIN enforces this version):
+  ```sh
+  Run go install tool
+  go: go.mod requires go >= 1.24.5 (running go 1.24.4; GOTOOLCHAIN=local)
+  Error: Process completed with exit code 1.
+  ```
 - [ ] Review `.golangci.yml`.
 - [ ] Add docs on that the managed `Taskfile.[lang].yml` contains all the
       possible tasks. The unmanaged `Taskfile.yml` then chooses what to use.
