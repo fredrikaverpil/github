@@ -2,6 +2,11 @@ name: opencode
 
 on:
   workflow_call:
+    inputs:
+      model:
+        type: string
+        description: The model to use for opencode.
+        default: anthropic/claude-sonnet-4-20250514
     secrets:
       ANTHROPIC_API_KEY:
         required: true
@@ -26,4 +31,4 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
-          model: anthropic/claude-opus-4-1-20250805
+          model: ${{ inputs.model }}
