@@ -1,0 +1,16 @@
+# MANAGED BY fredrikaverpil/github - DO NOT EDIT
+# This file is automatically updated during sync operations
+# Source: https://github.com/fredrikaverpil/github/templates/managed/workflow-*.yml
+
+name: opencode
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  ci:
+    uses: fredrikaverpil/github/.github/workflows/opencode.yml@main
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
