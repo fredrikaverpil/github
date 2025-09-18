@@ -6,10 +6,11 @@ on:
       model:
         type: string
         description: The model to use for opencode.
-        default: anthropic/claude-sonnet-4-20250514
+        default: github/claude-sonnet-4  # requires no API key
+
     secrets:
       ANTHROPIC_API_KEY:
-        required: true
+        required: false
 
 jobs:
   opencode:

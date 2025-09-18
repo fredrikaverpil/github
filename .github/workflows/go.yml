@@ -99,7 +99,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -134,7 +134,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -169,7 +169,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -208,7 +208,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -246,7 +246,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -282,7 +282,7 @@ jobs:
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
