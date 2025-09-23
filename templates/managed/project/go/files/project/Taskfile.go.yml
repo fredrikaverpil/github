@@ -65,14 +65,7 @@ tasks:
     # gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
     desc: Check for gopls errors
     cmds:
-      - |
-        if [ -n "$(find . -name "*.go" -not -path "./vendor/*" -print -quit)" ]; then
-          task ensure-gopls
-          gopls stats
-          find . -name "*.go" | xargs -P $(nproc) gopls check
-        else
-          echo "No Go files found, skipping gopls check"
-        fi
+      - '[ -n "$(find . -name "*.go" -not -path "./vendor/*" -print -quit)" ] && { task ensure-gopls; gopls stats; find . -name "*.go" | xargs -P $(nproc) gopls check; } || echo "No Go files found, skipping gopls check"'
 
   install-gopls:
     desc: Install gopls from latest version

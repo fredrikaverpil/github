@@ -21,6 +21,11 @@ on:
         required: false
         type: boolean
         default: false
+      skip-gopls:
+        description: 'Skip running gopls checks'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   find-dirs:
@@ -174,6 +179,7 @@ jobs:
 
   # TODO: apply quickfixes using gopls (maybe as separate job): gopls codeaction -w -exec -kind=quickfix <filename1.go> <filename2.go> ...
   gopls:
+    if: ${{ !inputs.skip-gopls }}
     needs: [find-dirs, go-tool-cache]
     strategy:
       fail-fast: false
