@@ -16,6 +16,11 @@ on:
         required: false
         type: boolean
         default: false
+      skip-tests:
+        description: 'Skip running go tests'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   find-dirs:
@@ -50,7 +55,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -84,7 +89,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -119,7 +124,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -154,7 +159,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -189,7 +194,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -217,6 +222,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
 
   go-test:
+    if: ${{ !inputs.skip-tests }}
     needs: [find-dirs, get-date, go-tool-cache]  # FIXME: needs cache for 'task' to be available
     strategy:
       fail-fast: false
@@ -229,7 +235,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false
@@ -265,7 +271,7 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           cache: false

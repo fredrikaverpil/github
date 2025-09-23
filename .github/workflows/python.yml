@@ -22,6 +22,11 @@ on:
         required: false
         type: string
         default: ''
+      skip-tests:
+        description: 'Skip running python tests'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   find-dirs:
@@ -106,6 +111,7 @@ jobs:
       - run: task -t Taskfile.python.yml mypy
 
   test:
+    if: ${{ !inputs.skip-tests }}
     needs: [find-dirs]
     strategy:
       fail-fast: false
