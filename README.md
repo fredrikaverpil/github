@@ -194,7 +194,7 @@ By importance/priority:
 
 - [x] Do not rely on cache `get-date`. Get SHA from lockfile instead.
 - [x] Cache `stylua` and cargo build.
-- [ ] Store `stylua.toml` in project root, like `.golangci.yml`.
+- [x] Store `stylua.toml` in project root, like `.golangci.yml`.
 - [ ] Move dependabot workflow into managed template system. It currently calls
       a separate project which generates the dependabot.yml file.
 - [ ] When Go has just been bumped, this error may be hit in CI if bumping Go
