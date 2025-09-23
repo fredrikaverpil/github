@@ -190,30 +190,37 @@ more details.
 
 ## To do
 
+By importance/priority:
+
+- [ ] Do not rely on cache `get-date`. Get SHA from lockfile instead.
+- [ ] Cache `stylua` and cargo build.
+- [ ] Store `stylua.toml` in project root, like `.golangci.yml`.
+- [ ] Move dependabot workflow into managed template system. It currently calls
+      a separate project which generates the dependabot.yml file.
 - [ ] When Go has just been bumped, this error may be hit in CI if bumping Go
       (reason is actions/setup-go is not updated yet with the latest Go version
       and GOTOOLCHAIN enforces this version):
+- [ ] Review `.golangci.yml`, compare against einride/sage's golangci-lint v2
+      config.
   ```sh
   Run go install tool
   go: go.mod requires go >= 1.24.5 (running go 1.24.4; GOTOOLCHAIN=local)
   Error: Process completed with exit code 1.
   ```
-- [ ] Review `.golangci.yml`.
 - [ ] Add docs on that the managed `Taskfile.[lang].yml` contains all the
       possible tasks. The unmanaged `Taskfile.yml` then chooses what to use.
       Ideally, CI would call `Taskfile.yml` but this will add considerable
       amount of complexity, if we want to keep the CI optimizations in place,
-      which runs each task as a separate job.
+      which runs each task as a separate job. **Done**: Documented in
+      AGENTS.md - Taskfile Architecture section.
 - [ ] Install binaries in `.tools/bin` or potentially `.tools/[tool-name]/bin`.
       Have Taskfiles prepend that path to `$PATH`, so we can be sure those
       binaries are indeed being used. Then have cache use those folders too.
-- [ ] Do not rely on cache `get-date`. Get SHA from lockfile instead.
-- [ ] Make `task` part of default tooling.
-- [ ] Cache `stylua` and cargo build.
-- [ ] Store `stylua.toml` in project root, like `.golangci.yml`.
 - [ ] Include tools/gomod, tools/cargo etc in `dependabot.yml` (separate from
       prod entries).
-- [ ] Sync issue template.
-- [ ] Sync PR template.
+- [ ] Sync issue template to target repo.
+- [ ] Sync PR template to target repo.
 - [ ] Generate `Taskfile.yml` for projects.
 - [ ] Make bootstrap setup up tooling?
+- [ ] ~Make `task` part of default tooling.~ We can use the official GHA task
+      instead for now.
