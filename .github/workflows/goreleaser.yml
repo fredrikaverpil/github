@@ -6,9 +6,15 @@ on:
       go-version-file:
         required: true
         type: string
+      skip-releases:
+        description: 'Skip running goreleaser'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   goreleaser:
+    if: ${{ !inputs.skip-releases }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -17,7 +23,7 @@ jobs:
           fetch-depth: 0  # Required for goreleaser to get tag information
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: ${{ inputs.go-version-file }}
 
