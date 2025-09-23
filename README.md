@@ -192,7 +192,7 @@ more details.
 
 By importance/priority:
 
-- [ ] Do not rely on cache `get-date`. Get SHA from lockfile instead.
+- [x] Do not rely on cache `get-date`. Get SHA from lockfile instead.
 - [ ] Cache `stylua` and cargo build.
 - [ ] Store `stylua.toml` in project root, like `.golangci.yml`.
 - [ ] Move dependabot workflow into managed template system. It currently calls

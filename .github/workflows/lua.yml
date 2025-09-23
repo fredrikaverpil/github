@@ -21,16 +21,8 @@ jobs:
           file_patterns: stylua.toml
           exclude_patterns: .tools
 
-  get-date:
-    runs-on: ubuntu-latest
-    outputs:
-      week: ${{ steps.date.outputs.week }}
-    steps:
-      - id: date
-        run: echo "week=$(date +'%Y-%U')" >> $GITHUB_OUTPUT
-
   format:
-    needs: [find-dirs, get-date]
+    needs: [find-dirs]
     strategy:
       fail-fast: false
       matrix:
@@ -43,7 +35,7 @@ jobs:
         with:
           path: |
             ~/.cargo/bin
-          key: stylua-${{ runner.os }}-${{ needs.get-date.outputs.week }}
+          key: stylua-${{ runner.os }}-${{ hashFiles('**/stylua.toml') }}
           restore-keys: |
             stylua-${{ runner.os }}-
       - name: Install Task
