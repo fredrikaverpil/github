@@ -23,6 +23,9 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      SYNC_TOKEN:
+        required: true
   push:
     branches:
       - main
