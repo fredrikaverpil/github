@@ -34,7 +34,7 @@ jobs:
     outputs:
       matrix: ${{ steps.find-dirs.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - id: find-dirs
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
@@ -51,7 +51,7 @@ jobs:
         os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -74,7 +74,7 @@ jobs:
         os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -97,7 +97,7 @@ jobs:
         os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -121,7 +121,7 @@ jobs:
         os-version: ${{ fromJson(inputs.os-versions) }}
     runs-on: ${{ matrix.os-version }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: ${{ matrix.python-version }}
