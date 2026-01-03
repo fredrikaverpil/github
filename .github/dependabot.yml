@@ -10,29 +10,3 @@ updates:
         update-types: ["minor", "patch"]
     labels:
       - "dependencies"
-
-  - package-ecosystem: "cargo"
-    directories: ["templates/unmanaged/project/lua/files/root/.tools"]
-    schedule:
-      interval: "monthly"
-    allow:
-      - dependency-type: all
-    groups:
-      cargo:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-    labels:
-      - "dependencies"
-
-  - package-ecosystem: "gomod"
-    directories: ["templates/unmanaged/project/go/files/root/.tools"]
-    schedule:
-      interval: "monthly"
-    allow:
-      - dependency-type: all
-    groups:
-      gomod:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-    labels:
-      - "dependencies"

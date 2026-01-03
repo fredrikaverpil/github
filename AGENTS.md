@@ -56,9 +56,9 @@ The `.github/workflows/` directory contains reusable workflows:
    `Taskfile.<lang>.yml` with conditional execution
 3. **Skip Controls**: Workflows accept `skip-tests` and `skip-releases` inputs
    for project-specific control
-4. **Tool Versioning**: Tools are managed in language-specific ways:
-   - Go: `.tools/go.mod` with `go tool` commands
-   - Python: `uv` dependency groups in `pyproject.toml`
+- **Tool Versioning**: Tools are managed in language-specific ways:
+  - Go: Version variables in `Taskfile.go.yml` using `go run` or `go install` with version suffixes.
+  - Python: `uv` dependency groups in `pyproject.toml`
 
 ## Common Development Commands
 
@@ -124,11 +124,9 @@ Workflows support skip inputs for project flexibility:
 ### Go Projects
 
 ```bash
-mkdir .tools && cd .tools
-go mod init github.com/fredrikaverpil/<project>/tools
-go get -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
-go get -tool golang.org/x/vuln/cmd/govulncheck@latest
-# ... additional tools as documented in README
+python .github/actions/find-dirs/find_dirs.py --file-patterns "go.mod" --exclude-patterns "tools"
+
+
 ```
 
 ### Python Projects
