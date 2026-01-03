@@ -8,7 +8,7 @@ vars:
   ROOT_DIR:
     sh: git rev-parse --show-toplevel
   # renovate: datasource=crate depName=stylua
-  STYLUA_VERSION: 0.20.0
+  STYLUA_VERSION: 2.0.0
 
 tasks:
   default:
