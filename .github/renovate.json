@@ -1,12 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^templates\\/managed\\/project\\/.*\\/files\\/project\\/Taskfile\\..+\\.yml$"],
+      "managerFilePatterns": [
+        "/^templates\\/managed\\/project\\/.*\\/files\\/project\\/Taskfile\\..+\\.yml$/"
+      ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: packageName=(?<packageName>.+?))?\\s+[A-Z_]+_VERSION: (?<currentValue>.+?)\\s"
       ]
