@@ -27,7 +27,7 @@ tasks:
     desc: Install stylua
     aliases: ["install"]
     cmds:
-      - cargo install stylua --version {{.STYLUA_VERSION}}
+      - cargo install stylua --version {{.STYLUA_VERSION}} --force
 
   ensure-stylua:
     internal: true
