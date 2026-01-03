@@ -108,21 +108,6 @@ def copy_file(
             dir_path = os.path.dirname(dst_path)
             dst_path = os.path.join(dir_path, f"{workflow_prefix}-{filename}")
 
-    # Skip Taskfiles if the destination is within the tools directory
-    filename = os.path.basename(dst_path)
-    tools_dir = os.path.normpath(os.path.join(repo_dir, ".tools"))
-    dst_path_norm = os.path.normpath(dst_path)
-    is_taskfile = filename.startswith("Taskfile") and (
-        filename.endswith(".yml") or filename.endswith(".yaml")
-    )
-    is_in_tools = dst_path_norm == tools_dir or dst_path_norm.startswith(
-        tools_dir + os.sep
-    )
-
-    if is_taskfile and is_in_tools:
-        print(f"  - Skipping {filename} (Taskfiles not allowed in tools directory)")
-        return
-
     # If unmanaged and file exists, skip
     if not is_managed and os.path.exists(dst_path):
         print(f"  - Skipping {os.path.basename(dst_path)} (already exists)")

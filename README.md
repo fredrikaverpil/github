@@ -116,61 +116,19 @@ projects.
 
 ### Go
 
-Add tools into the repo's `.tools/go.mod`:
+Tools and their versions are managed directly in the managed `Taskfile.go.yml`
+using `go run <package>@<version>`.
+
+You can install all tools into your `~/go/bin` by running:
 
 ```sh
-mkdir .tools && cd .tools
-go mod init github.com/fredrikaverpil/<project>/tools
-
-go get -tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
-go get -tool golang.org/x/vuln/cmd/govulncheck@latest
-go get -tool github.com/securego/gosec/v2/cmd/gosec@latest
-go get -tool golang.org/x/tools/cmd/goimports@latest
-go get -tool github.com/daixiang0/gci@latest
-go get -tool mvdan.cc/gofumpt@latest
-go get -tool github.com/segmentio/golines@latest
-
-go mod tidy
+task -t Taskfile.go.yml install-tools
 ```
 
 > [!NOTE]
 >
-> Experimental use of `golang.org/x/tools/gopls@latest` is done in CI without
-> requiring `gopls` as a `go tool`.
-
-<details>
-<summary>More on Go tool usage.</summary>
-
-```sh
-# Initialize a go.tool.mod modfile
-$ go mod init -modfile=go.tool.mod example.com
-
-# Add a tool to the module
-$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck
-
-# Run the tool from the command line
-$ go tool -modfile=go.tool.mod govulncheck
-
-# List all tools added to the module
-$ go list -modfile=go.tool.mod tool
-
-# Install all tools into ~/go/bin
-$ go install -modfile=go.tool.mod tool
-
-# Verify the integrity of the tool dependencies
-$ go mod verify -modfile=go.tool.mod
-
-# Upgrade or downgrade a tool to a specific version
-$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@v1.1.2
-
-# Upgrade all tools to their latest version
-$ go get -modfile=go.tool.mod tool
-
-# Remove a tool from the module
-$ go get -tool -modfile=go.tool.mod golang.org/x/vuln/cmd/govulncheck@none
-```
-
-</details>
+> `gopls` is not included in `install-tools` but can be installed via
+> `task -t Taskfile.go.yml install-gopls`.
 
 ### Python
 
@@ -192,32 +150,22 @@ more details.
 
 By importance/priority:
 
-- [x] Do not rely on cache `get-date`. Get SHA from lockfile instead.
-- [x] Cache `stylua` and cargo build.
-- [x] Store `stylua.toml` in project root, like `.golangci.yml`.
-- [x] Move dependabot workflow into managed template system. It currently calls
-      a separate project which generates the dependabot.yml file.
 - [ ] When Go has just been bumped, this error may be hit in CI if bumping Go
       (reason is actions/setup-go is not updated yet with the latest Go version
       and GOTOOLCHAIN enforces this version):
-- [ ] Review `.golangci.yml`, compare against einride/sage's golangci-lint v2
-      config.
   ```sh
   Run go install tool
   go: go.mod requires go >= 1.24.5 (running go 1.24.4; GOTOOLCHAIN=local)
   Error: Process completed with exit code 1.
   ```
+- [ ] Review `.golangci.yml`, compare against einride/sage's golangci-lint v2
+      config.
 - [ ] Add docs on that the managed `Taskfile.[lang].yml` contains all the
       possible tasks. The unmanaged `Taskfile.yml` then chooses what to use.
       Ideally, CI would call `Taskfile.yml` but this will add considerable
       amount of complexity, if we want to keep the CI optimizations in place,
       which runs each task as a separate job. **Done**: Documented in
       AGENTS.md - Taskfile Architecture section.
-- [ ] Install binaries in `.tools/bin` or potentially `.tools/[tool-name]/bin`.
-      Have Taskfiles prepend that path to `$PATH`, so we can be sure those
-      binaries are indeed being used. Then have cache use those folders too.
-- [ ] Include tools/gomod, tools/cargo etc in `dependabot.yml` (separate from
-      prod entries).
 - [ ] Sync issue template to target repo.
 - [ ] Sync PR template to target repo.
 - [ ] Generate `Taskfile.yml` for projects.

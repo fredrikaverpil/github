@@ -7,7 +7,7 @@ on:
         description: 'Comma-separated list of paths to exclude from dependabot scanning'
         required: false
         type: string
-        default: ".tools"
+        default: ""
       update-interval:
         description: 'How often to check for updates (daily, weekly, monthly)'
         required: false

@@ -19,7 +19,6 @@ jobs:
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
           file_patterns: stylua.toml
-          exclude_patterns: .tools
 
   format:
     needs: [find-dirs]

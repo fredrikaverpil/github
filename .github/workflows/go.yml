@@ -38,7 +38,6 @@ jobs:
         uses: fredrikaverpil/github/.github/actions/find-dirs@main
         with:
           file_patterns: go.mod
-          exclude_patterns: .tools
 
   go-tool-cache:
     strategy:
@@ -63,13 +62,21 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
+      - name: Install Task
+        uses: go-task/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Go tools
-        run: go install tool
-        working-directory: ${{ github.workspace }}/.tools
+        run: |
+          TASKFILE=$(find . -name "Taskfile.go.yml" -print -quit)
+          if [ -n "$TASKFILE" ]; then
+            task -t "$TASKFILE" install-tools
+          fi
       - name: review ~/go/bin
         run: ls -alh ~/go/bin
 
@@ -95,7 +102,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -130,7 +137,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -165,7 +172,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -205,7 +212,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -244,7 +251,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
@@ -280,7 +287,7 @@ jobs:
             ~/go/bin
             ~/go/pkg/mod
             ~/.cache/go-build
-          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/.tools/go.mod', '**/.tools/go.sum') }}
+          key: go-tool-${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/Taskfile.go.yml') }}
           restore-keys: |
             go-tool-${{ runner.os }}-go${{ matrix.go-version }}-
             go-tool-${{ runner.os }}-
