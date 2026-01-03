@@ -37,6 +37,8 @@ jobs:
           key: stylua-${{ runner.os }}-${{ hashFiles('**/stylua.toml') }}
           restore-keys: |
             stylua-${{ runner.os }}-
+      - name: Add ~/.cargo/bin to PATH
+        run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Install Task
         uses: go-task/setup-task@v1
         with:
