@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "github-actions"
     directories: ["/", ".github/actions/*/*.yml", ".github/actions/*/*.yaml", "action.yml", "action.yaml", "actions/*/*.yml", "actions/*/*.yaml"]
     schedule:
-      interval: "monthly"
+      interval: ""
     groups:
       github-actions:
         patterns: ["*"]
