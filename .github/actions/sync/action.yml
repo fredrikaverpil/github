@@ -10,7 +10,7 @@ runs:
         echo "TMP_REPO_PATH=.tmp_repo" >> $GITHUB_ENV
 
     - name: checkout fredrikaverpil/github into temporary directory
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: fredrikaverpil/github
         path: ${{ env.TMP_REPO_PATH }}
