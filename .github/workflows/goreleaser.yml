@@ -28,7 +28,7 @@ jobs:
           go-version-file: ${{ inputs.go-version-file }}
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6  # Use the latest version
+        uses: goreleaser/goreleaser-action@v7  # Use the latest version
         with:
           distribution: goreleaser
           version: latest
